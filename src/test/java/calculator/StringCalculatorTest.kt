@@ -28,6 +28,12 @@ internal class StringCalculatorTest {
     @Test
     @DisplayName("add 쉼표 구분자")
     fun add_comma_separator() {
-        assertEquals(3, stringCalculator!!.add("1,2"));
+        assertEquals(3, stringCalculator!!.add("1,2"))
+    }
+
+    @Test
+    @DisplayName("add 쉼표 또는 콜론 구분자")
+    fun add_comma_or_colon_separator() {
+        assertEquals(6, stringCalculator!!.add("1,2:3"))
     }
 }

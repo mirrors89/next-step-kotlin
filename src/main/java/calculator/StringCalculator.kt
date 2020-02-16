@@ -12,7 +12,7 @@ class StringCalculator {
         return sum(toInts(split(text)))
     }
 
-    private fun split(text: String?) = text!!.split(",")
+    private fun split(text: String?) = text!!.split("[,:]".toRegex())
 
     private fun isBlank(text: String?) = text == null || text.isEmpty()
 
