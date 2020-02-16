@@ -1,5 +1,6 @@
 package calculator
 
+import java.lang.RuntimeException
 import java.util.regex.Matcher
 import kotlin.streams.toList
 
@@ -27,7 +28,16 @@ class StringCalculator {
     private fun isBlank(text: String?) = text == null || text.isEmpty()
 
     private fun toInts(values: List<String>): List<Int> =
-            values.stream().map { value -> Integer.parseInt(value) }.toList()
+            values.stream().map { value -> toPositive(value) }.toList()
+
+    private fun toPositive(value: String?): Int {
+        val intValue = value!!.toInt()
+        if(intValue < 0) {
+            throw RuntimeException()
+        }
+
+        return intValue
+    }
 
     private fun sum(values: List<Int>): Int {
         var sum = 0

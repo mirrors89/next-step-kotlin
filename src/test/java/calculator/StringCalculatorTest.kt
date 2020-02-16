@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import java.lang.RuntimeException
+import kotlin.test.assertFailsWith
 
 internal class StringCalculatorTest {
     private var stringCalculator: StringCalculator? = null
@@ -41,5 +44,13 @@ internal class StringCalculatorTest {
     @DisplayName("add custom 구분자")
     fun add_custom_separator() {
         assertEquals(6, stringCalculator!!.add("//;\n1;2;3"))
+    }
+
+    @Test
+    @DisplayName("add 음수를 전달하면 RuntimeExecption")
+    fun add_negative() {
+        assertThrows(RuntimeException::class.java) {
+            stringCalculator!!.add("-1,2,3")
+        }
     }
 }
