@@ -20,4 +20,10 @@ class StringCalculatorTest {
         assertEquals(0, stringCalculator.add(null));
         assertEquals(0, stringCalculator.add(""));
     }
+
+    @Test
+    @DisplayName("add 숫자하나")
+    public void add_number_one() {
+        assertEquals(1, stringCalculator.add("1"));
+    }
 }
