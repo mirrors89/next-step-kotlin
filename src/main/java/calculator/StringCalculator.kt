@@ -1,5 +1,6 @@
 package calculator
 
+import java.util.regex.Matcher
 import kotlin.streams.toList
 
 
@@ -12,7 +13,16 @@ class StringCalculator {
         return sum(toInts(split(text)))
     }
 
-    private fun split(text: String?) = text!!.split("[,:]".toRegex())
+    private fun split(text: String?): List<String> {
+        val regex: Regex = "//(.)\n(.*)".toRegex()
+        if(regex.matches(text!!)) {
+            val groupValues : List<String> = regex.find(text)!!.groupValues
+            val customDelegate: String = groupValues[1]
+            return groupValues[2].split(customDelegate)
+        }
+
+        return text.split("[,:]".toRegex())
+    }
 
     private fun isBlank(text: String?) = text == null || text.isEmpty()
 

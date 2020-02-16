@@ -36,4 +36,10 @@ internal class StringCalculatorTest {
     fun add_comma_or_colon_separator() {
         assertEquals(6, stringCalculator!!.add("1,2:3"))
     }
+
+    @Test
+    @DisplayName("add custom 구분자")
+    fun add_custom_separator() {
+        assertEquals(6, stringCalculator!!.add("//;\n1;2;3"))
+    }
 }
