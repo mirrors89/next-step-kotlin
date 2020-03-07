@@ -1,12 +1,14 @@
 package webserver
 
 import org.slf4j.LoggerFactory
+import webserver.http.RequestLine
 import java.io.*
 import java.net.Socket
 import java.nio.file.Files
 
 class RequestHandler(connectionSocket: Socket) : Thread() {
     private val log = LoggerFactory.getLogger(RequestHandler::class.java)
+    private val WEBAPP_PATH = "./webapp"
 
     private var connection: Socket = connectionSocket
 
@@ -19,10 +21,8 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                 // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
                 val bufferedReader = BufferedReader(InputStreamReader(i))
                 val line = bufferedReader.readLine()
-                val token = line.split(" ")
-                val requestURL = token[1]
-
-                val body = Files.readAllBytes(File("./webapp$requestURL").toPath())
+                val requestLine = RequestLine.parse(line)
+                val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.requestURL).toPath())
 
                 val dos = DataOutputStream(o)
                 response200Header(dos, body.size)
