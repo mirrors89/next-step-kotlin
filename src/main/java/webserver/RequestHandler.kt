@@ -1,5 +1,7 @@
 package webserver
 
+import db.DataBase
+import model.User
 import org.slf4j.LoggerFactory
 import webserver.http.RequestLine
 import java.io.*
@@ -8,9 +10,11 @@ import java.nio.file.Files
 
 class RequestHandler(connectionSocket: Socket) : Thread() {
     private val log = LoggerFactory.getLogger(RequestHandler::class.java)
-    private val WEBAPP_PATH = "./webapp"
-
     private var connection: Socket = connectionSocket
+
+    companion object {
+        private const val WEBAPP_PATH = "./webapp"
+    }
 
     override fun run() {
         val inputStream = connection.getInputStream()
@@ -22,11 +26,20 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                 val bufferedReader = BufferedReader(InputStreamReader(i))
                 val line = bufferedReader.readLine()
                 val requestLine = RequestLine.parse(line)
-                val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
 
-                val dos = DataOutputStream(o)
-                response200Header(dos, body.size)
-                responseBody(dos, body)
+                if(requestLine.getPath().startsWith("/user/create")) {
+                    val params = requestLine.getParameters()
+                    val user = User(params.getOrDefault("userId", ""), params["password"], params["name"], params["email"])
+                    DataBase.addUser(user)
+
+                } else {
+                    val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
+
+                    val dos = DataOutputStream(o)
+                    response200Header(dos, body.size)
+                    responseBody(dos, body)
+                }
+
             }
         }
     }

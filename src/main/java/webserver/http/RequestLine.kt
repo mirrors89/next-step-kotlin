@@ -21,5 +21,10 @@ data class RequestLine(val method: HttpMethod,
 
     fun getQueryValue(key: String): String? = requestURL.parameter.get(key)
 
+
+    fun getParameters(): Map<String, String> {
+        return requestURL.getParameters()
+    }
+
     fun getPath(): String = requestURL.path
 }
