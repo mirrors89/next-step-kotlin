@@ -22,7 +22,7 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                 val bufferedReader = BufferedReader(InputStreamReader(i))
                 val line = bufferedReader.readLine()
                 val requestLine = RequestLine.parse(line)
-                val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.requestURL).toPath())
+                val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
 
                 val dos = DataOutputStream(o)
                 response200Header(dos, body.size)

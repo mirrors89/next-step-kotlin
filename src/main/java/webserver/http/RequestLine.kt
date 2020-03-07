@@ -1,7 +1,7 @@
 package webserver.http
 
-data class RequestLine(val method: String,
-                  val requestURL: String,
+data class RequestLine(val method: HttpMethod,
+                  val requestURL: RequestURL,
                   val protocol: String) {
 
     companion object {
@@ -12,10 +12,14 @@ data class RequestLine(val method: String,
 
         fun parse(requestLine: String): RequestLine {
             val requestLineSplit = requestLine.split(SPACE_STRING).toTypedArray()
-            val method = requestLineSplit[METHOD_INDEX]
-            val requestURL = requestLineSplit[METHOD_URL]
+            val method = HttpMethod.find(requestLineSplit[METHOD_INDEX])
+            val requestURL = RequestURL.parse(requestLineSplit[METHOD_URL])
             return RequestLine(method, requestURL, requestLineSplit[METHOD_PROTOCOL])
         }
 
     }
+
+    fun getQueryValue(key: String): String? = requestURL.parameter.get(key)
+
+    fun getPath(): String = requestURL.path
 }

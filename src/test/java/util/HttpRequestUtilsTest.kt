@@ -10,7 +10,7 @@ class HttpRequestUtilsTest {
     @Test
     fun parseQueryString() {
         var queryString = "userId=javajigi"
-        var parameters: Map<String?, String?> = parseQueryString(queryString)
+        var parameters: Map<String, String> = parseQueryString(queryString)
         assertThat(parameters["userId"], Is.`is`("javajigi"))
         assertThat(parameters["password"], Is.`is`(CoreMatchers.nullValue()))
         queryString = "userId=javajigi&password=password2"
@@ -20,8 +20,8 @@ class HttpRequestUtilsTest {
     }
 
     @Test
-    fun parseQueryString_null() {
-        var parameters: Map<String?, String?> = parseQueryString(null)
+    fun parseQueryStringEmpty() {
+        var parameters: Map<String, String> = parseQueryString("")
         assertThat(parameters.isEmpty(), Is.`is`(true))
         parameters = parseQueryString("")
         assertThat(parameters.isEmpty(), Is.`is`(true))
