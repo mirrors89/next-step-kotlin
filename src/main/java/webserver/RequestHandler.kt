@@ -1,9 +1,9 @@
 package webserver
 
 import org.slf4j.LoggerFactory
-import java.io.DataOutputStream
-import java.io.IOException
+import java.io.*
 import java.net.Socket
+import java.nio.file.Files
 
 class RequestHandler(connectionSocket: Socket) : Thread() {
     private val log = LoggerFactory.getLogger(RequestHandler::class.java)
@@ -11,15 +11,20 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
     private var connection: Socket = connectionSocket
 
     override fun run() {
-
         val inputStream = connection.getInputStream()
         val outputStream = connection.getOutputStream()
 
         inputStream.use { i ->
-            outputStream.use { o ->
+            outputStream.use { o: OutputStream ->
                 // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+                val bufferedReader = BufferedReader(InputStreamReader(i))
+                val line = bufferedReader.readLine()
+                val token = line.split(" ")
+                val requestURL = token[1]
+
+                val body = Files.readAllBytes(File("./webapp$requestURL").toPath())
+
                 val dos = DataOutputStream(o)
-                val body = "Hello World".toByteArray()
                 response200Header(dos, body.size)
                 responseBody(dos, body)
             }

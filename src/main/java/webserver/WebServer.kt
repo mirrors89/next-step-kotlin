@@ -5,7 +5,7 @@ import java.net.ServerSocket
 import java.net.Socket
 
 private val logger = LoggerFactory.getLogger("WebServer")
-private val DEFAULT_PORT = 8080
+private const val DEFAULT_PORT = 8080
 
 
 fun main(args: Array<String>) {
