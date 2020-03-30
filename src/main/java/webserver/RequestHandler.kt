@@ -94,6 +94,13 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                         response200Header(dos, body.size)
                         responseBody(dos, body)
                     }
+                } else if(requestLine.getPath().endsWith(".css")) {
+                    val dos = DataOutputStream(o)
+                    val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
+
+                    response200CssHeader(dos, body.size)
+                    responseBody(dos, body)
+
                 } else {
                     responseResource(o, requestLine.getPath())
                 }
@@ -123,6 +130,18 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
 
         response200Header(dos, body.size)
         responseBody(dos, body)
+    }
+
+    private fun response200CssHeader(dos: DataOutputStream, lengthOfBodyContent: Int) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n")
+            dos.writeBytes("Content-Type: text/css;charset=utf-8\r\n")
+            dos.writeBytes("Content-Length: $lengthOfBodyContent\r\n")
+            dos.writeBytes("\r\n")
+        } catch (e: IOException) {
+            log.error(e.message)
+        }
+
     }
 
     private fun response200Header(dos: DataOutputStream, lengthOfBodyContent: Int) {
