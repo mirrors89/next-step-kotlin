@@ -48,17 +48,24 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                                 params.get("name"), params.get("email"))
                         DataBase.addUser(user)
 
-                        log.info(user.toString())
+                        response302LoginSuccessHeader(DataOutputStream(o))
+                    } else if(requestLine.getPath() == "/user/login") {
+                        val body = IOUtils.readData(bufferedReader, contentLength)
+                        val params = Parameter.parse(body)
 
-                        val dos = DataOutputStream(o)
-                        response302Header(dos, "/index.html")
+                        val user = DataBase.findUserById(params.get("userId"))
+                        if(user == null) {
+                            responseResource(o, "/user/login_failed.html")
+                        }
+
+                        if(user?.password == params.get("password")) {
+                            response302LoginSuccessHeader(DataOutputStream(o))
+                        } else {
+                            responseResource(o, "/user/login_failed.html")
+                        }
                     }
                 } else {
-                    val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
-
-                    val dos = DataOutputStream(o)
-                    response200Header(dos, body.size)
-                    responseBody(dos, body)
+                    responseResource(o, requestLine.getPath())
                 }
 
             }
@@ -68,6 +75,14 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
     private fun getContentLength(line: String): Int {
         val headerToken = line.split(":")
         return headerToken[1].trim().toInt()
+    }
+
+    private fun responseResource(o: OutputStream, url: String) {
+        val dos = DataOutputStream(o)
+        val body = Files.readAllBytes(File(WEBAPP_PATH + url).toPath())
+
+        response200Header(dos, body.size)
+        responseBody(dos, body)
     }
 
     private fun response200Header(dos: DataOutputStream, lengthOfBodyContent: Int) {
@@ -81,10 +96,11 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
         }
     }
 
-    private fun response302Header(dos: DataOutputStream, url: String) {
+    private fun response302LoginSuccessHeader(dos: DataOutputStream) {
         try {
             dos.writeBytes("HTTP/1.1 302 Redirect \r\n")
-            dos.writeBytes("Location: $url\r\n")
+            dos.writeBytes("Set-Cookie: logined=true \r\n")
+            dos.writeBytes("Location: /index.html \r\n")
             dos.writeBytes("\r\n")
         } catch (e: IOException) {
             log.error(e.message)
