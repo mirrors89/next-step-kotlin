@@ -3,6 +3,9 @@ package webserver
 import db.DataBase
 import model.User
 import org.slf4j.LoggerFactory
+import util.IOUtils
+import webserver.http.HttpMethod
+import webserver.http.Parameter
 import webserver.http.RequestLine
 import java.io.*
 import java.net.Socket
@@ -14,6 +17,7 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
 
     companion object {
         private const val WEBAPP_PATH = "./webapp"
+        private const val CONTENT_LENGTH = "Content-Length"
     }
 
     override fun run() {
@@ -21,17 +25,31 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
         val outputStream = connection.getOutputStream()
 
         inputStream.use { i ->
-            outputStream.use { o: OutputStream ->
-                // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            outputStream.use { o ->
+
                 val bufferedReader = BufferedReader(InputStreamReader(i))
-                val line = bufferedReader.readLine()
+                var line = bufferedReader.readLine()
                 val requestLine = RequestLine.parse(line)
+                var contentLength = 0
 
-                if(requestLine.getPath().startsWith("/user/create")) {
-                    val params = requestLine.getParameters()
-                    val user = User(params.getOrDefault("userId", ""), params["password"], params["name"], params["email"])
-                    DataBase.addUser(user)
+                while(!line.equals("")) {
+                    line = bufferedReader.readLine()
 
+                    if(line.contains(CONTENT_LENGTH)) {
+                        contentLength = getContentLength(line)
+                    }
+                }
+
+                if(requestLine.method == HttpMethod.POST) {
+                    if(requestLine.getPath() == "/user/create") {
+                        val body = IOUtils.readData(bufferedReader, contentLength)
+                        val params = Parameter.parse(body)
+                        val user = User(params.getOrDefault("userId"), params.get("password"),
+                                params.get("name"), params.get("email"))
+                        DataBase.addUser(user)
+
+                        log.info(user.toString())
+                    }
                 } else {
                     val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
 
@@ -42,6 +60,11 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
 
             }
         }
+    }
+
+    private fun getContentLength(line: String): Int {
+        val headerToken = line.split(":")
+        return headerToken[1].trim().toInt()
     }
 
     private fun response200Header(dos: DataOutputStream, lengthOfBodyContent: Int) {
