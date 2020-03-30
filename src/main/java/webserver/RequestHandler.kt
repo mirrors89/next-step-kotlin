@@ -3,6 +3,7 @@ package webserver
 import db.DataBase
 import model.User
 import org.slf4j.LoggerFactory
+import util.HttpRequestUtils
 import util.IOUtils
 import webserver.http.HttpMethod
 import webserver.http.Parameter
@@ -18,6 +19,8 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
     companion object {
         private const val WEBAPP_PATH = "./webapp"
         private const val CONTENT_LENGTH = "Content-Length"
+        private const val COOKIE = "Cookie"
+        private const val LOGINED = "logined"
     }
 
     override fun run() {
@@ -31,9 +34,14 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                 var line = bufferedReader.readLine()
                 val requestLine = RequestLine.parse(line)
                 var contentLength = 0
+                var logined = false
 
                 while(!line.equals("")) {
                     line = bufferedReader.readLine()
+
+                    if(line.contains(COOKIE)) {
+                        logined = isLogin(line)
+                    }
 
                     if(line.contains(CONTENT_LENGTH)) {
                         contentLength = getContentLength(line)
@@ -63,6 +71,28 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                         } else {
                             responseResource(o, "/user/login_failed.html")
                         }
+                    } else if(requestLine.getPath() == "/user/list") {
+                        if(!logined) {
+                            responseResource(o, "/user/login.html")
+                            return
+                        }
+
+                        val users = DataBase.findAll()
+                        val sb = StringBuffer()
+                        sb.append("<table border='1'>")
+                        users.stream().forEach {
+                            sb.append("<tr>")
+                            sb.append("<td>" + it.userId + "</td>")
+                            sb.append("<td>" + it.name + "</td>")
+                            sb.append("<td>" + it.email + "</td>")
+                            sb.append("</tr>")
+                        }
+                        sb.append("</table>")
+
+                        val body = sb.toString().toByteArray()
+                        val dos = DataOutputStream(o)
+                        response200Header(dos, body.size)
+                        responseBody(dos, body)
                     }
                 } else {
                     responseResource(o, requestLine.getPath())
@@ -70,6 +100,16 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
 
             }
         }
+    }
+
+    private fun isLogin(line: String?): Boolean {
+        var headerTokens = line?.split(":")
+        val cookies = HttpRequestUtils.parseCookies(headerTokens!![1].trim())
+
+        val value = cookies.get(LOGINED) ?: return false
+
+        return value.toBoolean()
+
     }
 
     private fun getContentLength(line: String): Int {
