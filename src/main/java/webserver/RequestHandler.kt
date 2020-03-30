@@ -49,6 +49,9 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                         DataBase.addUser(user)
 
                         log.info(user.toString())
+
+                        val dos = DataOutputStream(o)
+                        response302Header(dos, "/index.html")
                     }
                 } else {
                     val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
@@ -72,6 +75,16 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
             dos.writeBytes("HTTP/1.1 200 OK \r\n")
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n")
             dos.writeBytes("Content-Length: $lengthOfBodyContent\r\n")
+            dos.writeBytes("\r\n")
+        } catch (e: IOException) {
+            log.error(e.message)
+        }
+    }
+
+    private fun response302Header(dos: DataOutputStream, url: String) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Redirect \r\n")
+            dos.writeBytes("Location: $url\r\n")
             dos.writeBytes("\r\n")
         } catch (e: IOException) {
             log.error(e.message)
