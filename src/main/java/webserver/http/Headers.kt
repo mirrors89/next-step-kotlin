@@ -15,8 +15,16 @@ class Headers(val header: HashMap<String, String> = HashMap()) {
         header[headerKeyValue[KEY].trim()] = headerKeyValue[VALUE].trim()
     }
 
+    fun put(key: String, value:String) {
+        header[key] = value
+    }
+
     fun get(key: String): String? = header[key]
 
     fun getOrDefault(key: String): String = header.getOrDefault(key, DEFAULT_STRING)
+
+    fun keySet(): Set<String> {
+        return header.keys
+    }
 
 }

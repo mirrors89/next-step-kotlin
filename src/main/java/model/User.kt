@@ -12,4 +12,8 @@ data class User(val userId: String,
                 " email=$email]"
     }
 
+
+    fun isLogin(password: String?) : Boolean {
+        return this.password.equals(password)
+    }
 }

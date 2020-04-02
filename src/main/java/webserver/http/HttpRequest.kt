@@ -7,9 +7,9 @@ import java.io.InputStreamReader
 
 class HttpRequest(inputStream: InputStream) {
 
-    val headers: Headers
-    val requestLine: RequestLine
-    val parameters: Parameters
+    private val headers: Headers
+    private val requestLine: RequestLine
+    private val parameters: Parameters
 
     init {
         val bufferedReader = BufferedReader(InputStreamReader(inputStream))
@@ -30,8 +30,8 @@ class HttpRequest(inputStream: InputStream) {
             this.parameters = Parameters.parse(body)
         } else {
             this.parameters = requestLine.getParameters()
-
         }
+
         this.headers = headers
         this.requestLine = requestLine
     }
