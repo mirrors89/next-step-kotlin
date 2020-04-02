@@ -2,15 +2,15 @@ package webserver.http
 
 import util.HttpRequestUtils
 
-data class Parameter(val parameter: Map<String, String> = hashMapOf()) {
+class Parameters(val parameter: Map<String, String> = hashMapOf()) {
 
     companion object {
         private const val DEFAULT_STRING = ""
 
 
-        fun parse(queryString: String): Parameter {
+        fun parse(queryString: String): Parameters {
             val query = HttpRequestUtils.parseQueryString(queryString)
-            return Parameter(query)
+            return Parameters(query)
         }
     }
 

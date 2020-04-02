@@ -7,5 +7,10 @@ enum class HttpMethod {
         fun find(method: String): HttpMethod {
             return valueOf(method.toUpperCase())
         }
+
+    }
+
+    fun isPost(): Boolean {
+        return this == POST
     }
 }

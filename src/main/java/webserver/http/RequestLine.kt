@@ -1,30 +1,51 @@
 package webserver.http
 
-data class RequestLine(val method: HttpMethod,
-                  val requestURL: RequestURL,
-                  val protocol: String) {
+class RequestLine {
+
+    private val method: HttpMethod
+    private val path: String
+    private val parameters: Parameters
+
+    constructor(method: HttpMethod, path: String) : this(method, path, Parameters())
+
+    constructor(method: HttpMethod, path: String, parameters: Parameters) {
+        this.method = method
+        this.path = path
+        this.parameters = parameters
+    }
 
     companion object {
         private const val METHOD_INDEX = 0
         private const val METHOD_URL = 1
-        private const val METHOD_PROTOCOL = 2
+        private const val PATH_SEPARATOR = "?"
         private const val SPACE_STRING = " "
 
-        fun parse(requestLine: String): RequestLine {
-            val requestLineSplit = requestLine.split(SPACE_STRING).toTypedArray()
+        fun parse(line: String): RequestLine {
+            val requestLineSplit = line.split(SPACE_STRING).toTypedArray()
             val method = HttpMethod.find(requestLineSplit[METHOD_INDEX])
-            val requestURL = RequestURL.parse(requestLineSplit[METHOD_URL])
-            return RequestLine(method, requestURL, requestLineSplit[METHOD_PROTOCOL])
+            val urlString = requestLineSplit[METHOD_URL]
+
+            if(HttpMethod.POST == method) {
+                return RequestLine(method, urlString)
+            }
+
+            val q = urlString.lastIndexOf(PATH_SEPARATOR)
+            if (q > -1) {
+                val path = urlString.substring(0, q)
+                val querySting = urlString.substring(q + 1)
+                val parameters: Parameters = Parameters.parse(querySting)
+                return RequestLine(method, path, parameters)
+            }
+            return RequestLine(method, urlString)
         }
-
     }
 
-    fun getQueryValue(key: String): String? = requestURL.parameter.get(key)
+    fun getMethod() = method
 
+    fun getPath(): String = path
 
-    fun getParameters(): Map<String, String> {
-        return requestURL.getParameters()
-    }
+    fun getParameters(): Parameters = parameters
 
-    fun getPath(): String = requestURL.path
+    fun getParameter(key: String): String? = parameters.get(key)
+
 }

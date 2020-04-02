@@ -1,0 +1,4 @@
+GET /user/create?userId=keeseung&password=password&name=KeeSeung
+Host: localhost:8080
+Connection: keep-alive
+Accept: */*

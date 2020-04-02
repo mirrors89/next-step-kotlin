@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory
 import util.HttpRequestUtils
 import util.IOUtils
 import webserver.http.HttpMethod
-import webserver.http.Parameter
-import webserver.http.RequestLine
+import webserver.http.Parameters
+import webserver.http.HttpRequest
 import java.io.*
 import java.net.Socket
 import java.nio.file.Files
@@ -30,36 +30,22 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
         inputStream.use { i ->
             outputStream.use { o ->
 
+                val httpRequest = HttpRequest(i)
                 val bufferedReader = BufferedReader(InputStreamReader(i))
-                var line = bufferedReader.readLine()
-                val requestLine = RequestLine.parse(line)
-                var contentLength = 0
-                var logined = false
+                val contentLength = (httpRequest.getHeader(CONTENT_LENGTH) ?: "0").toInt()
 
-                while(!line.equals("")) {
-                    line = bufferedReader.readLine()
+                if(httpRequest.getMethod().isPost()) {
+                    if(httpRequest.getPath() == "/user/create") {
+                        val user = User(httpRequest.getParameter("userId")!!,
+                                httpRequest.getParameter("password"),
+                                httpRequest.getParameter("name"),
+                                httpRequest.getParameter("email"))
 
-                    if(line.contains(COOKIE)) {
-                        logined = isLogin(line)
-                    }
-
-                    if(line.contains(CONTENT_LENGTH)) {
-                        contentLength = getContentLength(line)
-                    }
-                }
-
-                if(requestLine.method == HttpMethod.POST) {
-                    if(requestLine.getPath() == "/user/create") {
-                        val body = IOUtils.readData(bufferedReader, contentLength)
-                        val params = Parameter.parse(body)
-                        val user = User(params.getOrDefault("userId"), params.get("password"),
-                                params.get("name"), params.get("email"))
                         DataBase.addUser(user)
-
                         response302LoginSuccessHeader(DataOutputStream(o))
-                    } else if(requestLine.getPath() == "/user/login") {
+                    } else if(httpRequest.getPath() == "/user/login") {
                         val body = IOUtils.readData(bufferedReader, contentLength)
-                        val params = Parameter.parse(body)
+                        val params = Parameters.parse(body)
 
                         val user = DataBase.findUserById(params.get("userId"))
                         if(user == null) {
@@ -71,8 +57,8 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                         } else {
                             responseResource(o, "/user/login_failed.html")
                         }
-                    } else if(requestLine.getPath() == "/user/list") {
-                        if(!logined) {
+                    } else if(httpRequest.getPath() == "/user/list") {
+                        if(!isLogin(httpRequest.getHeader(COOKIE))) {
                             responseResource(o, "/user/login.html")
                             return
                         }
@@ -94,15 +80,15 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                         response200Header(dos, body.size)
                         responseBody(dos, body)
                     }
-                } else if(requestLine.getPath().endsWith(".css")) {
+                } else if(httpRequest.getPath().endsWith(".css")) {
                     val dos = DataOutputStream(o)
-                    val body = Files.readAllBytes(File(WEBAPP_PATH + requestLine.getPath()).toPath())
+                    val body = Files.readAllBytes(File(WEBAPP_PATH + httpRequest.getPath()).toPath())
 
                     response200CssHeader(dos, body.size)
                     responseBody(dos, body)
 
                 } else {
-                    responseResource(o, requestLine.getPath())
+                    responseResource(o, httpRequest.getPath())
                 }
 
             }

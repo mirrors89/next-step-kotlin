@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import util.HttpRequestUtils.Companion.parseQueryString
 
 class HttpRequestUtilsTest {
+
     @Test
     fun parseQueryString() {
         var queryString = "userId=javajigi"
