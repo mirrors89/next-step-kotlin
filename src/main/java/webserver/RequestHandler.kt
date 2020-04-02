@@ -4,14 +4,9 @@ import db.DataBase
 import model.User
 import org.slf4j.LoggerFactory
 import util.HttpRequestUtils
-import util.IOUtils
-import webserver.http.HttpMethod
-import webserver.http.Parameters
 import webserver.http.HttpRequest
 import webserver.http.HttpResponse
-import java.io.*
 import java.net.Socket
-import java.nio.file.Files
 
 class RequestHandler(connectionSocket: Socket) : Thread() {
     private val log = LoggerFactory.getLogger(RequestHandler::class.java)
@@ -36,50 +31,18 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
                 val path = httpRequest.getPath()
 
                 if(httpRequest.getMethod().isPost()) {
-                    if(path == "/user/create") {
-                        val user = User(httpRequest.getParameter("userId")!!,
-                                httpRequest.getParameter("password"),
-                                httpRequest.getParameter("name"),
-                                httpRequest.getParameter("email"))
-
-                        DataBase.addUser(user)
-                        httpResponse.sendRedirect("/index.html")
-
-                    } else if(path == "/user/login") {
-                        val user = DataBase.findUserById(httpRequest.getParameter("userId"))
-                        if(user == null) {
-                            httpResponse.sendRedirect("/user/login_failed.html")
-                            return
+                    when (path) {
+                        "/user/create" -> {
+                            createUser(httpRequest, httpResponse)
                         }
+                        "/user/login" -> {
+                            login(httpRequest, httpResponse)
 
-                        if(user.isLogin(httpRequest.getParameter("password"))) {
-                            httpResponse.addHeader(SET_COOKIE, "logined=true")
-                            httpResponse.sendRedirect("/index.html")
-                            return
                         }
-
-                        httpResponse.sendRedirect("/user/login_failed.html")
-
-                    } else if(path == "/user/list") {
-                        if(!isLogin(httpRequest.getHeader(COOKIE))) {
-                            httpResponse.sendRedirect("/user/login.html")
-                            return
+                        "/user/list" -> {
+                            listUser(httpRequest, httpResponse)
                         }
-
-                        val users = DataBase.findAll()
-                        val sb = StringBuffer()
-                        sb.append("<table border='1'>")
-                        users.stream().forEach {
-                            sb.append("<tr>")
-                            sb.append("<td>" + it.userId + "</td>")
-                            sb.append("<td>" + it.name + "</td>")
-                            sb.append("<td>" + it.email + "</td>")
-                            sb.append("</tr>")
-                        }
-                        sb.append("</table>")
-
-
-                        httpResponse.forwardBody(sb.toString())
+                        else -> return
                     }
                 } else {
                     httpResponse.forward(path)
@@ -87,6 +50,56 @@ class RequestHandler(connectionSocket: Socket) : Thread() {
 
             }
         }
+    }
+
+    private fun createUser(httpRequest: HttpRequest, httpResponse: HttpResponse) {
+        val user = User(httpRequest.getParameter("userId")!!,
+                httpRequest.getParameter("password"),
+                httpRequest.getParameter("name"),
+                httpRequest.getParameter("email"))
+
+        DataBase.addUser(user)
+        httpResponse.sendRedirect("/index.html")
+    }
+
+    private fun login(httpRequest: HttpRequest, httpResponse: HttpResponse) {
+        val user = DataBase.findUserById(httpRequest.getParameter("userId"))
+        if (user == null) {
+            httpResponse.sendRedirect("/user/login_failed.html")
+            return
+        }
+
+        if (user.isLogin(httpRequest.getParameter("password"))) {
+            httpResponse.addHeader(SET_COOKIE, "logined=true")
+            httpResponse.sendRedirect("/index.html")
+            return
+        }
+
+        httpResponse.sendRedirect("/user/login_failed.html")
+        return
+    }
+
+    private fun listUser(httpRequest: HttpRequest, httpResponse: HttpResponse): Boolean {
+        if (!isLogin(httpRequest.getHeader(COOKIE))) {
+            httpResponse.sendRedirect("/user/login.html")
+            return true
+        }
+
+        val users = DataBase.findAll()
+        val sb = StringBuffer()
+        sb.append("<table border='1'>")
+        users.stream().forEach {
+            sb.append("<tr>")
+            sb.append("<td>" + it.userId + "</td>")
+            sb.append("<td>" + it.name + "</td>")
+            sb.append("<td>" + it.email + "</td>")
+            sb.append("</tr>")
+        }
+        sb.append("</table>")
+
+
+        httpResponse.forwardBody(sb.toString())
+        return false
     }
 
     private fun isLogin(line: String?): Boolean {
