@@ -45,7 +45,4 @@ class RequestLine {
     fun getPath(): String = path
 
     fun getParameters(): Parameters = parameters
-
-    fun getParameter(key: String): String? = parameters.get(key)
-
 }

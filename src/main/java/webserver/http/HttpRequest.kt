@@ -25,7 +25,7 @@ class HttpRequest(inputStream: InputStream) {
             headers.put(line)
             line = bufferedReader.readLine()
         }
-        if(HttpMethod.POST == requestLine.getMethod()) {
+        if(requestLine.getMethod().isPost()) {
             val body = IOUtils.readData(bufferedReader, headers.getOrDefault("Content-Length").toInt())
             this.parameters = Parameters.parse(body)
         } else {
