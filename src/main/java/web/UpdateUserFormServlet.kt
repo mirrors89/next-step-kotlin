@@ -10,11 +10,16 @@ import javax.servlet.http.HttpServletResponse
 @WebServlet("/user/update")
 class UpdateUserFormServlet : HttpServlet() {
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
-        val userId = req.getParameter("userId")
-        req.setAttribute("user", DataBase.findUserById(userId))
+        val session = req.session
+        val userSession = session.getAttribute("user")
 
-        val rd = req.getRequestDispatcher("/user/update.jsp")
-        rd.forward(req, resp)
+        userSession?.let {
+            val user : User = it as User
+            req.setAttribute("user", DataBase.findUserById(user.userId))
+
+            val rd = req.getRequestDispatcher("/user/update.jsp")
+            rd.forward(req, resp)
+        } ?: resp.sendRedirect("/user/login")
     }
 
     override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {

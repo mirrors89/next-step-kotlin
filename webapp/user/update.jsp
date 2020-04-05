@@ -67,8 +67,8 @@
                 <li class="active"><a href="/">Posts</a></li>
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
-                        <li><a href="#" role="button">로그아웃</a></li>
-                        <li><a href="#" role="button">개인정보수정</a></li>
+                        <li><a href="/user/logout" role="button">로그아웃</a></li>
+                        <li><a href="/user/update" role="button">개인정보수정</a></li>
                     </c:when>
                     <c:otherwise>
                         <li><a href="/user/create" role="button">회원가입</a></li>
