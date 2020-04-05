@@ -4,14 +4,17 @@ import db.DataBase
 import webserver.http.HttpRequest
 import webserver.http.HttpResponse
 
-class LoginController: Controller {
+class LoginController: AbstractController() {
 
     companion object {
         private const val SET_COOKIE = "Set-Cookie"
     }
 
-    override fun service(httpRequest: HttpRequest, httpResponse: HttpResponse) {
+    override fun doGet(httpRequest: HttpRequest, httpResponse: HttpResponse) {
+        TODO("Not yet implemented")
+    }
 
+    override fun doPost(httpRequest: HttpRequest, httpResponse: HttpResponse) {
         val user = DataBase.findUserById(httpRequest.getParameter("userId"))
         if (user == null) {
             httpResponse.sendRedirect("/user/login_failed.html")

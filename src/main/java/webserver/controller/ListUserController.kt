@@ -6,7 +6,7 @@ import webserver.RequestHandler
 import webserver.http.HttpRequest
 import webserver.http.HttpResponse
 
-class ListUserController : Controller {
+class ListUserController : AbstractController() {
 
     companion object {
         private const val COOKIE = "Cookie"
@@ -14,8 +14,11 @@ class ListUserController : Controller {
         private const val SPLIT_SEPARATOR = ":"
     }
 
-    override fun service(httpRequest: HttpRequest, httpResponse: HttpResponse) {
+    override fun doGet(httpRequest: HttpRequest, httpResponse: HttpResponse) {
+        TODO("Not yet implemented")
+    }
 
+    override fun doPost(httpRequest: HttpRequest, httpResponse: HttpResponse) {
         if (!isLogin(httpRequest.getHeader(COOKIE))) {
             httpResponse.sendRedirect("/user/login.html")
             return
@@ -33,8 +36,7 @@ class ListUserController : Controller {
         }
         sb.append("</table>")
 
-        httpResponse.forwardBody(sb.toString())
-    }
+        httpResponse.forwardBody(sb.toString())    }
 
 
     private fun isLogin(line: String?): Boolean {
