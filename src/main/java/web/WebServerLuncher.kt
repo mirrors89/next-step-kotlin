@@ -7,7 +7,7 @@ class WebServerLuncher {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val webappDirLocation = "webapp/";
+            val webappDirLocation = "webapp/"
             val tomcat = Tomcat()
             tomcat.setPort(8080)
 
