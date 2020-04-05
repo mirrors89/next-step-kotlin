@@ -23,7 +23,7 @@ class HttpRequestUtils {
         }
 
         private fun parseValues(values: String, separator: String): Map<String, String> {
-            if (values == null || values.isBlank()) {
+            if (values.isBlank()) {
                 return hashMapOf()
             }
             return values.split(separator).map { t: String -> getKeyValue(t, "=") }
