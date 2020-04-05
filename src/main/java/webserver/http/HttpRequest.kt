@@ -40,7 +40,13 @@ class HttpRequest(inputStream: InputStream) {
 
     fun getCookie() = HttpCookie(getHeader("Cookie"))
 
+    fun getSession(): HttpSession {
+        return HttpSessions.getSession("JSESSIONID")
+    }
+
     fun getMethod(): HttpMethod = requestLine.getMethod()
+
+
 
     fun getParameter(key: String): String? = parameters.get(key)
 

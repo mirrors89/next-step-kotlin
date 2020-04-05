@@ -6,10 +6,6 @@ import webserver.http.HttpResponse
 
 class LoginController: AbstractController() {
 
-    companion object {
-        private const val SET_COOKIE = "Set-Cookie"
-    }
-
     override fun doGet(httpRequest: HttpRequest, httpResponse: HttpResponse) {
         TODO("Not yet implemented")
     }
@@ -22,7 +18,8 @@ class LoginController: AbstractController() {
         }
 
         if (user.isLogin(httpRequest.getParameter("password"))) {
-            httpResponse.addHeader(SET_COOKIE, "logined=true")
+            val httpSession = httpRequest.getSession()
+            httpSession.setAttribute("user", user)
             httpResponse.sendRedirect("/index.html")
             return
         }

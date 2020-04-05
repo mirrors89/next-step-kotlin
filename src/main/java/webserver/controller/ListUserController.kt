@@ -2,9 +2,9 @@ package webserver.controller
 
 import db.DataBase
 import util.HttpRequestUtils
-import webserver.RequestHandler
 import webserver.http.HttpRequest
 import webserver.http.HttpResponse
+import webserver.http.HttpSession
 
 class ListUserController : AbstractController() {
 
@@ -19,7 +19,7 @@ class ListUserController : AbstractController() {
     }
 
     override fun doPost(httpRequest: HttpRequest, httpResponse: HttpResponse) {
-        if (!isLogin(httpRequest.getHeader(COOKIE))) {
+        if (!isLogin(httpRequest.getSession())) {
             httpResponse.sendRedirect("/user/login.html")
             return
         }
@@ -39,12 +39,8 @@ class ListUserController : AbstractController() {
         httpResponse.forwardBody(sb.toString())    }
 
 
-    private fun isLogin(line: String?): Boolean {
-        var headerTokens = line?.split(SPLIT_SEPARATOR)
-        val cookies = HttpRequestUtils.parseCookies(headerTokens!![1].trim())
-
-        val value = cookies.get(LOGINED) ?: return false
-
-        return value.toBoolean()
+    private fun isLogin(httpSession: HttpSession): Boolean {
+        httpSession.getAttribute("user") ?: return false
+        return true
     }
 }
