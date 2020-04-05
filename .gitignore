@@ -1,4 +1,5 @@
 /target/
 .idea/
-Nextstep.iml
+nextstep.iml
 webapp/WEB-INF/classes
+tomcat.8080
