@@ -38,6 +38,8 @@ class HttpRequest(inputStream: InputStream) {
 
     fun getHeader(key: String): String? = headers.get(key)
 
+    fun getCookie() = HttpCookie(getHeader("Cookie"))
+
     fun getMethod(): HttpMethod = requestLine.getMethod()
 
     fun getParameter(key: String): String? = parameters.get(key)

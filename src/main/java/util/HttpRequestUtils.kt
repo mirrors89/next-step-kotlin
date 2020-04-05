@@ -18,12 +18,12 @@ class HttpRequestUtils {
          * 값은 name1=value1; name2=value2 형식임
          * @return
          */
-        fun parseCookies(cookies: String): Map<String, String> {
+        fun parseCookies(cookies: String?): Map<String, String> {
             return parseValues(cookies, ";")
         }
 
-        private fun parseValues(values: String, separator: String): Map<String, String> {
-            if (values.isBlank()) {
+        private fun parseValues(values: String?, separator: String): Map<String, String> {
+            if (values == null || values.isBlank()) {
                 return hashMapOf()
             }
             return values.split(separator).map { t: String -> getKeyValue(t, "=") }
