@@ -7,8 +7,15 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebServlet("/user/create")
-class CreateUserServlet: HttpServlet() {
+@WebServlet("/user/update")
+class UpdateUserFormServlet : HttpServlet() {
+    override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
+        val userId = req.getParameter("userId")
+        req.setAttribute("user", DataBase.findUserById(userId))
+
+        val rd = req.getRequestDispatcher("/user/update.jsp")
+        rd.forward(req, resp)
+    }
 
     override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
         val user = User(req.getParameter("userId"),

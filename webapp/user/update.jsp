@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="kr">
 <head>
@@ -53,13 +55,12 @@
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
-            
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
-            	<span class="sr-only">Toggle navigation</span>
-            	<span class="icon-bar"></span>
-            	<span class="icon-bar"></span>
-            	<span class="icon-bar"></span>
-            </button>            
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
@@ -74,23 +75,30 @@
 </div>
 
 <div class="container" id="main">
-   <div class="col-md-10 col-md-offset-1">
-      <div class="panel panel-default">
-          <table class="table table-hover">
-              <thead>
-                <tr>
-                    <th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th><th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                    <th scope="row">1</th> <td>javajigi</td> <td>자바지기</td> <td>javajigi@sample.net</td><td><a href="#" class="btn btn-success" role="button">수정</a></td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th> <td>slipp</td> <td>슬립</td> <td>slipp@sample.net</td><td><a href="#" class="btn btn-success" role="button">수정</a></td>
-                </tr>
-              </tbody>
-          </table>
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default content-main">
+            <form name="question" method="post" action="/user/update">
+                <div class="form-group">
+                    <label for="userId">사용자 아이디</label>
+                    <input class="form-control" id="userId" disabled value="${user.userId}">
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input class="form-control" id="name" name="name" placeholder="Name" value="${user.name}">
+                </div>
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="${user.email}">
+                </div>
+                <button type="submit" class="btn btn-success clearfix pull-right">회원가입</button>
+                <div class="clearfix" />
+
+                <input type="hidden" name="userId" value="${user.userId}">
+            </form>
         </div>
     </div>
 </div>
@@ -99,5 +107,5 @@
 <script src="../js/jquery-2.2.0.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/scripts.js"></script>
-	</body>
+</body>
 </html>

@@ -99,7 +99,7 @@
                     <td>${user.name}</td>
                     <td>${user.email}</td>
                     <td>
-                        <a href="#" class="btn btn-success" role="button">수정</a>
+                        <a href="/user/update?userId=${user.userId}" class="btn btn-success" role="button">수정</a>
                     </td>
                 </tr>
                 </c:forEach>
