@@ -39,8 +39,8 @@
                     <td>${user.name}</td>
                     <td>${user.email}</td>
                     <td>
-                        <c:if test="${not empty loginUser && loginUser.userId eq user.userId}">
-                        <a href="/user/update" class="btn btn-success" role="button">수정</a>
+                        <c:if test="${not empty sessionScope.user && sessionScope.user.userId eq user.userId}">
+                        <a href="/user/updateForm?userId=${user.userId}" class="btn btn-success" role="button">수정</a>
                         </c:if>
                     </td>
                 </tr>

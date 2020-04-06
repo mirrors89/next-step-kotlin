@@ -15,6 +15,7 @@ class WebServerLuncher {
             connector.uriEncoding = "UTF-8"
             tomcat.addWebapp("/", File(webappDirLocation).absolutePath)
             println("configuring app with basedir: " + File("./$webappDirLocation").absolutePath)
+
             tomcat.start()
             tomcat.server.await()
         }

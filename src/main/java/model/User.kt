@@ -16,4 +16,8 @@ data class User(val userId: String,
     fun isLogin(password: String?) : Boolean {
         return this.password.equals(password)
     }
+
+    fun isSameUser(user: User): Boolean {
+        return userId == user.userId
+    }
 }
