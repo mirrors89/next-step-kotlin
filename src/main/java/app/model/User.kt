@@ -1,9 +1,9 @@
 package app.model
 
-data class User(val userId: String,
-                val password: String?,
-                val name: String?,
-                val email: String?) {
+data class User(var userId: String,
+                var password: String?,
+                var name: String?,
+                var email: String?) {
 
     override fun toString(): String {
         return "User [userId=$userId," +
@@ -19,5 +19,12 @@ data class User(val userId: String,
 
     fun isSameUser(user: User): Boolean {
         return userId == user.userId
+    }
+
+    fun update(user: User) {
+        this.userId = user.userId
+        this.password = user.password
+        this.name = user.name
+        this.email = user.email
     }
 }

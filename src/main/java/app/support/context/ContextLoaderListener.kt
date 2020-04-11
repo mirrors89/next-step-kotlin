@@ -14,7 +14,7 @@ class ContextLoaderListener : ServletContextListener {
     override fun contextInitialized(sce: ServletContextEvent) {
         val populator = ResourceDatabasePopulator()
         populator.addScript(ClassPathResource("jwp.sql"))
-        DatabasePopulatorUtils.execute(populator, ConnectionManager.dataSource)
+        DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource())
         logger.info("Completed Load ServletContext!")
     }
 
