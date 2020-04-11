@@ -1,4 +1,4 @@
-package web.controller
+package core.mvc
 
 import java.lang.NullPointerException
 import javax.servlet.http.HttpServletRequest

@@ -1,14 +1,12 @@
-package web.controller
+package app.web.controller
 
+import core.mvc.Controller
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class LogoutController : Controller {
+class HomeController : Controller {
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): String {
-        val session = req.session
-        session.invalidate()
-
-        return "redirect:/"
+        return "/index.html"
     }
 
 }

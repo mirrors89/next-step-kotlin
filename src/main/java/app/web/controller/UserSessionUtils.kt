@@ -1,6 +1,6 @@
-package web.controller
+package app.web.controller
 
-import model.User
+import app.model.User
 import javax.servlet.http.HttpSession
 
 class UserSessionUtils {

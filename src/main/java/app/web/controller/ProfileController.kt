@@ -1,6 +1,7 @@
-package web.controller
+package app.web.controller
 
-import db.DataBase
+import core.mvc.Controller
+import core.db.DataBase
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 

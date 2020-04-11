@@ -1,6 +1,6 @@
-package db
+package core.db
 
-import model.User
+import app.model.User
 
 object DataBase {
     private val users: MutableMap<String, User> = hashMapOf()

@@ -1,4 +1,4 @@
-package web
+package core.mvc
 
 import org.slf4j.LoggerFactory
 import javax.servlet.ServletException

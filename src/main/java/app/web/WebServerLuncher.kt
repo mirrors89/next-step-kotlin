@@ -1,4 +1,4 @@
-package web
+package app.web
 
 import org.apache.catalina.startup.Tomcat
 import java.io.File

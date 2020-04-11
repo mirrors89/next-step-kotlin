@@ -1,8 +1,9 @@
-package web.controller
+package app.web.controller
 
-import db.DataBase
-import db.DataBase.findUserById
-import model.User
+import core.mvc.Controller
+import core.db.DataBase
+import core.db.DataBase.findUserById
+import app.model.User
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
