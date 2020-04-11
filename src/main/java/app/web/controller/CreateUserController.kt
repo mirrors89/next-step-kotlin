@@ -1,5 +1,6 @@
 package app.web.controller
 
+import app.dao.UserDao
 import core.mvc.Controller
 import core.db.DataBase
 import app.model.User
@@ -13,7 +14,9 @@ class CreateUserController: Controller {
                 req.getParameter("password"),
                 req.getParameter("name"),
                 req.getParameter("email"))
-        DataBase.addUser(user)
+
+        val userDao = UserDao()
+        userDao.insert(user)
 
         val session = req.session
         session.setAttribute("user", user)
