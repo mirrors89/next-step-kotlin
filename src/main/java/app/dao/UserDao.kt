@@ -2,18 +2,15 @@ package app.dao
 
 import app.model.User
 import core.jdbc.ConnectionManager
+import java.sql.PreparedStatement
 
 class UserDao {
     fun insert(user: User) {
         val con = ConnectionManager.getConnection()
         con.use {
-            val sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)"
-            val prepareStatement = it.prepareStatement(sql)
+            val prepareStatement = it.prepareStatement(createQueryForInsert())
             prepareStatement.use { ps ->
-                ps.setString(1, user.userId)
-                ps.setString(2, user.password)
-                ps.setString(3, user.name)
-                ps.setString(4, user.email)
+                setValuesForInsert(user, ps)
                 ps.executeUpdate()
             }
         }
@@ -45,13 +42,9 @@ class UserDao {
     fun update(user: User): User {
         val con = ConnectionManager.getConnection()
         con.use {
-            val sql = "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
-            val prepareStatement = it.prepareStatement(sql)
+            val prepareStatement = it.prepareStatement(createQueryForUpdate())
             prepareStatement.use {ps ->
-                ps.setString(1, user.password)
-                ps.setString(2, user.name)
-                ps.setString(3, user.email)
-                ps.setString(4, user.userId)
+                setValuesForUpdate(user, ps)
                 ps.executeUpdate()
             }
         }
@@ -79,5 +72,27 @@ class UserDao {
         }
 
         return users
+    }
+
+    private fun setValuesForInsert(user: User, pstmt: PreparedStatement) {
+        pstmt.setString(1, user.userId)
+        pstmt.setString(2, user.password)
+        pstmt.setString(3, user.name)
+        pstmt.setString(4, user.email)
+    }
+
+    private fun createQueryForInsert(): String {
+        return "INSERT INTO USERS VALUES (?, ?, ?, ?)"
+    }
+
+    private fun setValuesForUpdate(user: User, pstmt: PreparedStatement) {
+        pstmt.setString(1, user.password)
+        pstmt.setString(2, user.name)
+        pstmt.setString(3, user.email)
+        pstmt.setString(4, user.userId)
+    }
+
+    private fun createQueryForUpdate(): String {
+        return "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
     }
 }
