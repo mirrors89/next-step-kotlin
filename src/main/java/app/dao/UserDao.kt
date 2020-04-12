@@ -2,13 +2,12 @@ package app.dao
 
 import app.model.User
 import core.jdbc.JdbcTemplate
-import core.jdbc.SelectJdbcTemplate
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 
 class UserDao {
     fun insert(user: User) {
-        val insertJdbcTemplate = object : JdbcTemplate() {
+        val jdbcTemplate = object : JdbcTemplate() {
             override fun setValues(pstmt: PreparedStatement) {
                 pstmt.setString(1, user.userId)
                 pstmt.setString(2, user.password)
@@ -16,15 +15,17 @@ class UserDao {
                 pstmt.setString(4, user.email)
             }
 
-            override fun createQuery(): String {
-                return "INSERT INTO USERS VALUES (?, ?, ?, ?)"
+            override fun mapRow(resultSet: ResultSet): Any? {
+                return null
             }
         }
-        insertJdbcTemplate.update()
+
+        val sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)"
+        jdbcTemplate.update(sql)
     }
 
     fun findByUserId(userId: String): User? {
-        val selectJdbcTemplate = object : SelectJdbcTemplate() {
+        val jdbcTemplate = object : JdbcTemplate() {
             override fun setValues(pstmt: PreparedStatement) {
                 pstmt.setString(1, userId)
             }
@@ -40,7 +41,7 @@ class UserDao {
         }
 
         val sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?"
-        return selectJdbcTemplate.queryObject(sql) as User
+        return jdbcTemplate.queryObject(sql) as User
     }
 
     fun update(user: User) {
@@ -52,16 +53,18 @@ class UserDao {
                 pstmt.setString(4, user.userId)
             }
 
-            override fun createQuery(): String {
-                return "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
+            override fun mapRow(resultSet: ResultSet): Any? {
+                return null
             }
         }
-        jdbcTemplate.update()
+
+        val sql = "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
+        jdbcTemplate.update(sql)
 
     }
 
     fun findAll(): List<User> {
-        val selectJdbcTemplate = object : SelectJdbcTemplate() {
+        val jdbcTemplate = object : JdbcTemplate() {
             override fun setValues(pstmt: PreparedStatement) {
             }
 
@@ -76,7 +79,7 @@ class UserDao {
         }
 
         val sql = "SELECT userId, password, name, email FROM USERS"
-        return selectJdbcTemplate.query(sql)
+        return jdbcTemplate.query(sql)
                 .filterIsInstance<User>()
     }
 
