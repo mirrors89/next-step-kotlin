@@ -2,13 +2,24 @@ package app.dao
 
 import app.model.User
 import core.jdbc.ConnectionManager
-import core.jdbc.InsertJdbcTemplate
-import core.jdbc.UpdateJdbcTemplate
+import core.jdbc.JdbcTemplate
+import java.sql.PreparedStatement
 
 class UserDao {
     fun insert(user: User) {
-        val insertJdbcTemplate = InsertJdbcTemplate()
-        insertJdbcTemplate.insert(user)
+        val insertJdbcTemplate = object : JdbcTemplate() {
+            override fun setValues(user: User, pstmt: PreparedStatement) {
+                pstmt.setString(1, user.userId)
+                pstmt.setString(2, user.password)
+                pstmt.setString(3, user.name)
+                pstmt.setString(4, user.email)
+            }
+
+            override fun createQuery(): String {
+                return "INSERT INTO USERS VALUES (?, ?, ?, ?)"
+            }
+        }
+        insertJdbcTemplate.update(user)
     }
 
     fun findByUserId(userId: String): User? {
@@ -35,8 +46,19 @@ class UserDao {
     }
 
     fun update(user: User) {
-        val updateJdbcTemplate = UpdateJdbcTemplate()
-        updateJdbcTemplate.update(user)
+        val jdbcTemplate = object : JdbcTemplate() {
+            override fun setValues(user: User, pstmt: PreparedStatement) {
+                pstmt.setString(1, user.password)
+                pstmt.setString(2, user.name)
+                pstmt.setString(3, user.email)
+                pstmt.setString(4, user.userId)
+            }
+
+            override fun createQuery(): String {
+                return "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
+            }
+        }
+        jdbcTemplate.update(user)
 
     }
 
