@@ -8,7 +8,7 @@ import java.sql.PreparedStatement
 class UserDao {
     fun insert(user: User) {
         val insertJdbcTemplate = object : JdbcTemplate() {
-            override fun setValues(user: User, pstmt: PreparedStatement) {
+            override fun setValues(pstmt: PreparedStatement) {
                 pstmt.setString(1, user.userId)
                 pstmt.setString(2, user.password)
                 pstmt.setString(3, user.name)
@@ -19,7 +19,7 @@ class UserDao {
                 return "INSERT INTO USERS VALUES (?, ?, ?, ?)"
             }
         }
-        insertJdbcTemplate.update(user)
+        insertJdbcTemplate.update()
     }
 
     fun findByUserId(userId: String): User? {
@@ -47,7 +47,7 @@ class UserDao {
 
     fun update(user: User) {
         val jdbcTemplate = object : JdbcTemplate() {
-            override fun setValues(user: User, pstmt: PreparedStatement) {
+            override fun setValues(pstmt: PreparedStatement) {
                 pstmt.setString(1, user.password)
                 pstmt.setString(2, user.name)
                 pstmt.setString(3, user.email)
@@ -58,7 +58,7 @@ class UserDao {
                 return "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
             }
         }
-        jdbcTemplate.update(user)
+        jdbcTemplate.update()
 
     }
 
