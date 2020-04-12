@@ -1,9 +1,10 @@
 package app.dao
 
 import app.model.User
-import core.jdbc.ConnectionManager
 import core.jdbc.JdbcTemplate
+import core.jdbc.SelectJdbcTemplate
 import java.sql.PreparedStatement
+import java.sql.ResultSet
 
 class UserDao {
     fun insert(user: User) {
@@ -23,26 +24,23 @@ class UserDao {
     }
 
     fun findByUserId(userId: String): User? {
-        val con = ConnectionManager.getConnection()
-        return con.use {
-            val sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?"
-            val prepareStatement = it.prepareStatement(sql)
-            val user = prepareStatement.use { ps ->
-                ps.setString(1, userId)
-                val result = ps.executeQuery()
-                var user: User? = null
-                if (result.next()) {
-                    user = User(
-                            result.getString("userId"),
-                            result.getString("password"),
-                            result.getString("name"),
-                            result.getString("email"))
-                }
-
-                user
+        val selectJdbcTemplate = object : SelectJdbcTemplate() {
+            override fun setValues(pstmt: PreparedStatement) {
+                pstmt.setString(1, userId)
             }
-            user
+
+            override fun mapRow(resultSet: ResultSet): Any? {
+                return User(
+                        resultSet.getString("userId"),
+                        resultSet.getString("password"),
+                        resultSet.getString("name"),
+                        resultSet.getString("email"))
+            }
+
         }
+
+        val sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?"
+        return selectJdbcTemplate.queryObject(sql) as User
     }
 
     fun update(user: User) {
@@ -63,25 +61,23 @@ class UserDao {
     }
 
     fun findAll(): List<User> {
-        val users: MutableList<User> = mutableListOf()
-        val con = ConnectionManager.getConnection()
-        con.use {
-            val sql = "SELECT userId, password, name, email FROM USERS"
-            val prepareStatement = it.prepareStatement(sql)
-            prepareStatement.use { ps ->
-                val result = ps.executeQuery()
-                while (result.next()) {
-                    users.add(User(
-                            result.getString("userId"),
-                            result.getString("password"),
-                            result.getString("name"),
-                            result.getString("email")))
-                }
-
+        val selectJdbcTemplate = object : SelectJdbcTemplate() {
+            override fun setValues(pstmt: PreparedStatement) {
             }
+
+            override fun mapRow(resultSet: ResultSet): Any? {
+                return User(
+                        resultSet.getString("userId"),
+                        resultSet.getString("password"),
+                        resultSet.getString("name"),
+                        resultSet.getString("email"))
+            }
+
         }
 
-        return users
+        val sql = "SELECT userId, password, name, email FROM USERS"
+        return selectJdbcTemplate.query(sql)
+                .filterIsInstance<User>()
     }
 
 }
