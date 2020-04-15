@@ -9,15 +9,8 @@ class UserDao {
     fun insert(user: User) {
         val jdbcTemplate = JdbcTemplate()
 
-        val pss = PreparedStatementSetter {
-            it.setString(1, user.userId)
-            it.setString(2, user.password)
-            it.setString(3, user.name)
-            it.setString(4, user.email)
-        }
-
         val sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)"
-        jdbcTemplate.update(sql, pss)
+        jdbcTemplate.update(sql, user.userId, user.password, user.name, user.email)
     }
 
     fun findByUserId(userId: String): User? {
@@ -44,15 +37,8 @@ class UserDao {
     fun update(user: User) {
         val jdbcTemplate = JdbcTemplate()
 
-        val pss = PreparedStatementSetter {
-            it.setString(1, user.password)
-            it.setString(2, user.name)
-            it.setString(3, user.email)
-            it.setString(4, user.userId)
-        }
-
         val sql = "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
-        jdbcTemplate.update(sql, pss)
+        jdbcTemplate.update(sql, user.password, user.name, user.email, user.userId)
 
     }
 

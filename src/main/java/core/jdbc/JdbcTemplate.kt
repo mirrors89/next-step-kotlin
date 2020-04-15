@@ -5,13 +5,15 @@ import java.sql.SQLException
 class JdbcTemplate {
 
     @Throws(DataAccessException::class)
-    fun update(sql: String, pss: PreparedStatementSetter) {
+    fun update(sql: String, vararg parameter : Any?) {
         try {
             val con = ConnectionManager.getConnection()
             con.use {
                 val prepareStatement = it.prepareStatement(sql)
                 prepareStatement.use {ps ->
-                    pss.setValues(ps)
+                    for(index in parameter.indices) {
+                        ps.setObject(index + 1, parameter[index])
+                    }
                     ps.executeUpdate()
                 }
             }
