@@ -21,7 +21,7 @@ class JdbcTemplate {
     }
 
     @Throws(DataAccessException::class)
-    fun query(sql: String, pss: PreparedStatementSetter, rowMapper: RowMapper): List<Any?> {
+    fun <T> query(sql: String, pss: PreparedStatementSetter, rowMapper: RowMapper<T>): List<T> {
         try {
 
             val con = ConnectionManager.getConnection()
@@ -31,7 +31,7 @@ class JdbcTemplate {
                     pss.setValues(ps)
                     val resultSet = ps.executeQuery()
 
-                    val result: MutableList<Any?> = mutableListOf()
+                    val result: MutableList<T> = mutableListOf()
                     while (resultSet.next()) {
                         result.add(rowMapper.mapRow(resultSet))
                     }
@@ -46,7 +46,7 @@ class JdbcTemplate {
     }
 
     @Throws(DataAccessException::class)
-    fun queryObject(sql: String, pss: PreparedStatementSetter, rowMapper: RowMapper): Any? {
+    fun <T> queryObject(sql: String, pss: PreparedStatementSetter, rowMapper: RowMapper<T>): T? {
         val result = query(sql, pss, rowMapper)
         if(result.isEmpty()) {
             return null

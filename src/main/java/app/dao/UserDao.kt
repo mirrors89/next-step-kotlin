@@ -4,7 +4,6 @@ import app.model.User
 import core.jdbc.JdbcTemplate
 import core.jdbc.PreparedStatementSetter
 import core.jdbc.RowMapper
-import java.sql.ResultSet
 
 class UserDao {
     fun insert(user: User) {
@@ -39,7 +38,7 @@ class UserDao {
         }
 
         val sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?"
-        return jdbcTemplate.queryObject(sql, pss, rowMapper) as User
+        return jdbcTemplate.queryObject(sql, pss, rowMapper)
     }
 
     fun update(user: User) {
@@ -74,7 +73,6 @@ class UserDao {
 
         val sql = "SELECT userId, password, name, email FROM USERS"
         return jdbcTemplate.query(sql, pss, rowMapper)
-                .filterIsInstance<User>()
     }
 
 }
