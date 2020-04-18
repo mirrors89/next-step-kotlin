@@ -1,5 +1,6 @@
 package core.jdbc
 
+import java.sql.ResultSet
 import java.sql.SQLException
 
 class JdbcTemplate {
@@ -23,19 +24,22 @@ class JdbcTemplate {
     }
 
     @Throws(DataAccessException::class)
-    fun <T> query(sql: String, pss: PreparedStatementSetter, rowMapper: RowMapper<T>): List<T> {
+    fun <T> query(sql: String, vararg parameter: Any, rowMapper: (ResultSet) -> T): List<T> {
         try {
 
             val con = ConnectionManager.getConnection()
             con.use {
                 val prepareStatement = it.prepareStatement(sql)
                 prepareStatement.use { ps ->
-                    pss.setValues(ps)
+                    for(index in parameter.indices) {
+                        ps.setObject(index + 1, parameter[index])
+                    }
+
                     val resultSet = ps.executeQuery()
 
                     val result: MutableList<T> = mutableListOf()
                     while (resultSet.next()) {
-                        result.add(rowMapper.mapRow(resultSet))
+                        result.add(rowMapper(resultSet))
                     }
 
                     return result
@@ -48,12 +52,8 @@ class JdbcTemplate {
     }
 
     @Throws(DataAccessException::class)
-    fun <T> queryObject(sql: String, pss: PreparedStatementSetter, rowMapper: RowMapper<T>): T? {
-        val result = query(sql, pss, rowMapper)
-        if(result.isEmpty()) {
-            return null
-        }
-
-        return result[0]
+    fun <T> queryObject(sql: String, vararg parameter: Any, rowMapper: (ResultSet) -> T): T? {
+        val result = query(sql, parameter, rowMapper = rowMapper)
+        return result.firstOrNull()
     }
 }
