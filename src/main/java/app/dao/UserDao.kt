@@ -10,13 +10,19 @@ class UserDao {
         val jdbcTemplate = JdbcTemplate()
 
         val sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)"
-        jdbcTemplate.update(sql, user.userId, user.password, user.name, user.email)
+        jdbcTemplate.update(sql,
+                user.userId,
+                user.password,
+                user.name,
+                user.email)
     }
 
     fun findByUserId(userId: String): User? {
         val jdbcTemplate = JdbcTemplate()
 
-        val sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?"
+        val sql = "SELECT userId, password, name, email " +
+                "FROM USERS " +
+                "WHERE userId = ?"
 
         return jdbcTemplate.queryObject(sql, userId) {
             User(
@@ -32,14 +38,19 @@ class UserDao {
         val jdbcTemplate = JdbcTemplate()
 
         val sql = "UPDATE USERS SET password = ?, name = ?, email= ? WHERE userId = ?"
-        jdbcTemplate.update(sql, user.password, user.name, user.email, user.userId)
+        jdbcTemplate.update(sql,
+                user.password,
+                user.name,
+                user.email,
+                user.userId)
 
     }
 
     fun findAll(): List<User> {
         val jdbcTemplate = JdbcTemplate()
 
-        val sql = "SELECT userId, password, name, email FROM USERS"
+        val sql = "SELECT userId, password, name, email " +
+                "FROM USERS"
         return jdbcTemplate.query(sql) {
             User(
                     it.getString("userId"),

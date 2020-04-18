@@ -5,14 +5,6 @@ data class User(var userId: String,
                 var name: String?,
                 var email: String?) {
 
-    override fun toString(): String {
-        return "User [userId=$userId," +
-                " password=$password," +
-                " name=$name," +
-                " email=$email]"
-    }
-
-
     fun isLogin(password: String?) : Boolean {
         return this.password.equals(password)
     }
