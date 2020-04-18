@@ -1,4 +1,4 @@
-package app.web.controller
+package app.web.controller.user
 
 import core.mvc.Controller
 import javax.servlet.http.HttpServletRequest

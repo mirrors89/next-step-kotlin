@@ -30,7 +30,7 @@ class DispatcherServlet : HttpServlet() {
         val controller = rm.findController(requestUri)
 
         try {
-            val viewName = controller!!.execute(req, resp)
+            val viewName = controller!!.execute(req, resp) ?: return
             move(viewName, req, resp)
 
         } catch (e: Exception) {

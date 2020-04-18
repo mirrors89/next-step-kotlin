@@ -1,5 +1,7 @@
-package app.web.controller
+package app.web.controller.user
 
+import app.dao.UserDao
+import app.web.controller.UserSessionUtils
 import core.mvc.Controller
 import core.db.DataBase
 import javax.servlet.http.HttpServletRequest
@@ -11,7 +13,8 @@ class ListUserController: Controller {
             return "redirect:/users/loginForm"
         }
 
-        req.setAttribute("users", DataBase.findAll())
+        val userDao = UserDao()
+        req.setAttribute("users", userDao.findAll())
         return "/user/list.jsp"
     }
 }

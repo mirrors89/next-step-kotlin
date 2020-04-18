@@ -1,6 +1,9 @@
 package core.mvc
 
 import app.web.controller.*
+import app.web.controller.qna.AddAnswerController
+import app.web.controller.qna.ShowController
+import app.web.controller.user.*
 import org.slf4j.LoggerFactory
 
 class RequestMapping {
@@ -20,6 +23,9 @@ class RequestMapping {
         mapping["/user/create"] = CreateUserController()
         mapping["/user/updateForm"] = UpdateFormUserController()
         mapping["/user/update"] = UpdateUserController()
+
+        mapping["/qna/show"] = ShowController()
+        mapping["/api/qna/addAnswer"] = AddAnswerController()
 
         logger.info("Initialized Request Mapping!")
     }

@@ -1,5 +1,6 @@
-package app.web.controller
+package app.web.controller.user
 
+import app.dao.UserDao
 import core.mvc.Controller
 import core.db.DataBase
 import app.model.User
@@ -9,7 +10,8 @@ import javax.servlet.http.HttpServletResponse
 class LoginController : Controller {
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): String {
 
-        val user = DataBase.findUserById(req.getParameter("userId")) ?: return "/user/login_failed.jsp"
+        val userDao = UserDao()
+        val user = userDao.findByUserId(req.getParameter("userId")) ?: return "/user/login_failed.jsp"
 
         if (user.isLogin(req.getParameter("password"))) {
             loginSuccess(req, resp, user)

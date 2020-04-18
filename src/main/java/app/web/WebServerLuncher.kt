@@ -1,6 +1,8 @@
 package app.web
 
 import org.apache.catalina.startup.Tomcat
+import org.apache.catalina.webresources.DirResourceSet
+import org.apache.catalina.webresources.StandardRoot
 import java.io.File
 
 class WebServerLuncher {
@@ -13,8 +15,15 @@ class WebServerLuncher {
 
             val connector = tomcat.connector
             connector.uriEncoding = "UTF-8"
-            tomcat.addWebapp("/", File(webappDirLocation).absolutePath)
+
+            val context = tomcat.addWebapp("/", File(webappDirLocation).absolutePath)
+            val additionWebInfClasses = File("target/classes")
+            val standardRoot = StandardRoot(context)
+            standardRoot.addPreResources(DirResourceSet(standardRoot, "/WEB-INF/classes", additionWebInfClasses.absolutePath, "/"))
+            context.resources = standardRoot
+
             println("configuring app with basedir: " + File("./$webappDirLocation").absolutePath)
+
 
             tomcat.start()
             tomcat.server.await()
