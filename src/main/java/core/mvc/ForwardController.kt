@@ -13,8 +13,8 @@ class ForwardController(private val forwardUrl: String) : Controller {
     }
 
 
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): String {
-        return forwardUrl
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
+        return JspView(forwardUrl)
 
     }
 

@@ -4,22 +4,24 @@ import app.dao.UserDao
 import core.mvc.Controller
 import core.db.DataBase
 import app.model.User
+import core.mvc.JspView
+import core.mvc.View
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class LoginController : Controller {
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): String {
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
 
         val userDao = UserDao()
-        val user = userDao.findByUserId(req.getParameter("userId")) ?: return "/user/login_failed.jsp"
+        val user = userDao.findByUserId(req.getParameter("userId")) ?: return JspView("/user/login_failed.jsp")
 
         if (user.isLogin(req.getParameter("password"))) {
             loginSuccess(req, resp, user)
-            return "redirect:/users"
+            return JspView("redirect:/users")
 
         }
 
-        return "/user/login_failed.jsp"
+        return JspView("/user/login_failed.jsp")
     }
 
 

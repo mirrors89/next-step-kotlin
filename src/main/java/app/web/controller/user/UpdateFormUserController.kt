@@ -4,11 +4,13 @@ import app.dao.UserDao
 import app.web.controller.UserSessionUtils
 import core.mvc.Controller
 import core.db.DataBase
+import core.mvc.JspView
+import core.mvc.View
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class UpdateFormUserController : Controller {
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): String {
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
 
         val userDao = UserDao()
         val userId = req.getParameter("userId")
@@ -17,7 +19,7 @@ class UpdateFormUserController : Controller {
         check(UserSessionUtils.isSameUser(req.session, user)) { "다른 사용자의 정보를 수정할 수 없습니다." }
         req.setAttribute("user", user)
 
-        return "/user/update.jsp"
+        return JspView("/user/update.jsp")
     }
 
 }

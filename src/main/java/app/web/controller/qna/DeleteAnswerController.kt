@@ -5,21 +5,21 @@ import core.mvc.Controller
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import app.model.Result
-import com.fasterxml.jackson.databind.ObjectMapper
+import core.mvc.JsonView
+import core.mvc.View
 
 class DeleteAnswerController : Controller {
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): String? {
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
         val answerId = req.getParameter("answerId")
-
         val answerDao = AnswerDao()
 
-        val mapper = ObjectMapper()
-        resp.contentType = "application/json;charset=UTF-8"
-        val out = resp.writer
-
         answerDao.delete(answerId)
-        out.print(mapper.writeValueAsString(Result.ok()))
-        return null
+
+        val ok = Result.ok()
+        req.setAttribute("status", ok.isStatus)
+        req.setAttribute("message", ok.message)
+
+        return JsonView()
     }
 
 }

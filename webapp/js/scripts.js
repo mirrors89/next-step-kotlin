@@ -25,10 +25,10 @@ function addAnswer(e) {
 }
 
 function onSuccess(json, status) {
-  console.log(json)
+  var answer = json.answer;
 
-  var answerTemplate = $("#answerTemplate").html()
-  var template = answerTemplate.format(json.writer, new Date(json.createdDate.nano), json.contents, json.answerId, json.answerId);
+  var answerTemplate = $("#answerTemplate").html();
+  var template = answerTemplate.format(answer.writer, new Date(answer.createdDate.nano), answer.contents, answer.answerId, answer.answerId);
   $(".qna-comment-slipp-articles").prepend(template)
 
 }
