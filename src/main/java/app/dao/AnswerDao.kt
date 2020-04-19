@@ -59,4 +59,11 @@ class AnswerDao {
                     it.getTimestamp("createdDate").toLocalDateTime())
         }
     }
+
+    fun delete(answerId: String) {
+        val sql = "DELETE FROM ANSWERS WHERE answerId = ?"
+
+        jdbcTemplate.update(sql, answerId)
+        return jdbcTemplate.update(sql, answerId)
+    }
 }

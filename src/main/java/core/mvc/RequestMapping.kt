@@ -2,6 +2,7 @@ package core.mvc
 
 import app.web.controller.*
 import app.web.controller.qna.AddAnswerController
+import app.web.controller.qna.DeleteAnswerController
 import app.web.controller.qna.ShowController
 import app.web.controller.user.*
 import org.slf4j.LoggerFactory
@@ -26,6 +27,7 @@ class RequestMapping {
 
         mapping["/qna/show"] = ShowController()
         mapping["/api/qna/addAnswer"] = AddAnswerController()
+        mapping["/api/qna/deleteAnswer"] = DeleteAnswerController()
 
         logger.info("Initialized Request Mapping!")
     }

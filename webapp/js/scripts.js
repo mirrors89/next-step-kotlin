@@ -10,7 +10,6 @@ String.prototype.format = function() {
 
 $(".answerWrite input[type=submit]").click(addAnswer);
 
-
 function addAnswer(e) {
   e.preventDefault();
   var queryString = $("form[name=answer]").serialize();
@@ -26,8 +25,39 @@ function addAnswer(e) {
 }
 
 function onSuccess(json, status) {
+  console.log(json)
+
   var answerTemplate = $("#answerTemplate").html()
-  var template = answerTemplate.format(json.writer, new Date(json.createdDate), json.contents, json.answerId);
+  var template = answerTemplate.format(json.writer, new Date(json.createdDate.nano), json.contents, json.answerId, json.answerId);
   $(".qna-comment-slipp-articles").prepend(template)
 
+}
+
+function onError(xhr, status) {
+  alert("error");
+}
+
+
+$(".qna-comment").on("click", ".form-delete", deleteAnswer);
+
+function deleteAnswer(e) {
+  e.preventDefault();
+
+  var deleteBtn = $(this);
+  var queryString = deleteBtn.closest("form").serialize();
+
+  $.ajax({
+    type: "post",
+    url: "/api/qna/deleteAnswer",
+    data: queryString,
+    dataType: "json",
+    error: function (xhr, status) {
+      alert("error");
+    },
+    success: function (json, status) {
+      if (json.status) {
+        deleteBtn.closest('article').remove();
+      }
+    }
+  });
 }
