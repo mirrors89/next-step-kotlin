@@ -4,7 +4,7 @@ import java.lang.NullPointerException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ForwardController(private val forwardUrl: String) : Controller {
+class ForwardController(private val forwardUrl: String) : AbstractController() {
 
     init {
         if(forwardUrl.isEmpty()) {
@@ -13,8 +13,8 @@ class ForwardController(private val forwardUrl: String) : Controller {
     }
 
 
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
-        return JspView(forwardUrl)
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
+        return jspView(forwardUrl)
 
     }
 

@@ -2,21 +2,19 @@ package app.web.controller.user
 
 import app.dao.UserDao
 import app.web.controller.UserSessionUtils
-import core.mvc.Controller
 import core.db.DataBase
-import core.mvc.JspView
-import core.mvc.View
+import core.mvc.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ListUserController: Controller {
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
+class ListUserController: AbstractController() {
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         if(!UserSessionUtils.isLogined(req.session)) {
-            return JspView("redirect:/users/loginForm")
+            return jspView("redirect:/users/loginForm")
         }
 
         val userDao = UserDao()
-        req.setAttribute("users", userDao.findAll())
-        return JspView("/user/list.jsp")
+        return jspView("/user/list.jsp")
+                .addObject("users", userDao.findAll())
     }
 }

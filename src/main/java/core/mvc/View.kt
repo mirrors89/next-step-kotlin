@@ -5,5 +5,5 @@ import javax.servlet.http.HttpServletResponse
 
 interface View {
     @Throws(Exception::class)
-    fun render(request: HttpServletRequest, response: HttpServletResponse)
+    fun render(model: Map<String, Any?>, request: HttpServletRequest, response: HttpServletResponse)
 }

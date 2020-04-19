@@ -29,8 +29,9 @@ class DispatcherServlet : HttpServlet() {
         val controller = rm.findController(requestUri)
 
         try {
-            val view = controller!!.execute(req, resp)
-            view.render(req, resp)
+            val modelAndView = controller!!.execute(req, resp)
+            val view = modelAndView.view
+            view.render(modelAndView.getModel(), req, resp)
 
         } catch (e: Exception) {
             throw ServletException(e.message)

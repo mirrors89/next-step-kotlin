@@ -2,17 +2,16 @@ package app.web.controller.qna
 
 import app.dao.AnswerDao
 import app.model.Answer
-import com.fasterxml.jackson.databind.ObjectMapper
-import core.mvc.Controller
-import core.mvc.JsonView
+import core.mvc.AbstractController
+import core.mvc.ModelAndView
 import core.mvc.View
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class AddAnswerController : Controller {
+class AddAnswerController : AbstractController() {
 
 
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val answer = Answer( req.getParameter("questionId").toLong(),
                 req.getParameter("writer"),
                 req.getParameter("contents"))
@@ -20,7 +19,6 @@ class AddAnswerController : Controller {
         val answerDao = AnswerDao()
 
         val savedAnswer = answerDao.insert(answer)
-        req.setAttribute("answer", savedAnswer)
-        return JsonView()
+        return jsonView().addObject("answer", savedAnswer)
     }
 }

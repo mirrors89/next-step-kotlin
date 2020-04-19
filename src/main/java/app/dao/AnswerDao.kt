@@ -46,7 +46,7 @@ class AnswerDao {
     }
 
     fun findAllByQuestionId(questionId: Long): List<Answer> {
-        val sql = ("SELECT answerId, writer, contents, createdDate FROM ANSWERS " +
+        val sql = ("SELECT answerId, questionId, writer, contents, createdDate FROM ANSWERS " +
                 "WHERE questionId = ? " +
                 "order by answerId desc")
 

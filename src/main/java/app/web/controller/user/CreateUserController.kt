@@ -1,16 +1,14 @@
 package app.web.controller.user
 
 import app.dao.UserDao
-import core.mvc.Controller
 import core.db.DataBase
 import app.model.User
-import core.mvc.JspView
-import core.mvc.View
+import core.mvc.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class CreateUserController: Controller {
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): View {
+class CreateUserController: AbstractController() {
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
 
         val user = User(req.getParameter("userId"),
                 req.getParameter("password"),
@@ -22,6 +20,6 @@ class CreateUserController: Controller {
 
         val session = req.session
         session.setAttribute("user", user)
-        return JspView("redirect:/users")
+        return jspView("redirect:/users")
     }
 }
