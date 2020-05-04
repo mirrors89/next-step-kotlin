@@ -27,4 +27,13 @@ data class Question(var questionId: Long,
 
     fun getCreatedDate(): String = createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
+    fun isSameUser(user: User?): Boolean {
+        return user!!.isSameUser(this.writer)
+    }
+
+    fun isSameUser(writer: String): Boolean {
+        return this.writer == writer
+
+    }
+
 }

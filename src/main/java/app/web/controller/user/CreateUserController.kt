@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse
 
 class CreateUserController: AbstractController() {
 
+    private val userDao = UserDao.getInstance()
+
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
 
         val user = User(req.getParameter("userId"),
@@ -16,7 +18,7 @@ class CreateUserController: AbstractController() {
                 req.getParameter("name"),
                 req.getParameter("email"))
 
-        val userDao = UserDao()
+
         userDao.insert(user)
 
         val session = req.session

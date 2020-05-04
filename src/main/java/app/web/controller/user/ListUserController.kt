@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletResponse
 
 class ListUserController: AbstractController() {
 
+    private val userDao = UserDao.getInstance()
+
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         if(!UserSessionUtils.isLogined(req.session)) {
             return jspView("redirect:/users/loginForm")
         }
 
-        val userDao = UserDao()
+
         return jspView("/user/list.jsp")
                 .addObject("users", userDao.findAll())
     }

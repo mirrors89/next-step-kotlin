@@ -24,7 +24,6 @@ class WebServerLuncher {
 
             println("configuring app with basedir: " + File("./$webappDirLocation").absolutePath)
 
-
             tomcat.start()
             tomcat.server.await()
         }

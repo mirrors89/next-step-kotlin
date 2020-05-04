@@ -8,9 +8,9 @@ import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class CreateQnaController: AbstractController() {
+class CreateQuestionController: AbstractController() {
 
-    private val questionDao = QuestionDao()
+    private val questionDao = QuestionDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         check(UserSessionUtils.isLogined(req.session)) {

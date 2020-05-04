@@ -66,4 +66,13 @@ class AnswerDao {
         jdbcTemplate.update(sql, answerId)
         return jdbcTemplate.update(sql, answerId)
     }
+
+
+    companion object {
+        private val ANSWER_DAO =  AnswerDao()
+
+        fun getInstance(): AnswerDao {
+            return ANSWER_DAO
+        }
+    }
 }

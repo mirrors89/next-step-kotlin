@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse
 
 class ShowController: AbstractController() {
 
-    private val questionDao = QuestionDao()
-    private val answerDao = AnswerDao()
+    private val questionDao = QuestionDao.getInstance()
+    private val answerDao = AnswerDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val questionId = req.getParameter("questionId").toLong()

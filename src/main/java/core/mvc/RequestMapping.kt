@@ -25,10 +25,15 @@ class RequestMapping {
 
         mapping["/qna/show"] = ShowController()
         mapping["/qna/form"] = FormController()
-        mapping["/qna/create"] = CreateQnaController()
+        mapping["/qna/create"] = CreateQuestionController()
+        mapping["/qna/updateForm"] = UpdateFormController()
+        mapping["/qna/update"] = UpdateQuestionController()
+        mapping["/qna/delete"] = DeleteQuestionController()
 
+        mapping["/api/qna/list"] = ApiListAnswerController()
+        mapping["/api/qna/delete"] = ApiDeleteQuestionController()
         mapping["/api/qna/addAnswer"] = AddAnswerController()
-        mapping["/api/qna/deleteAnswer"] = DeleteAnswerController()
+        mapping["/api/qna/deleteAnswer"] = ApiDeleteAnswerController()
 
         logger.info("Initialized Request Mapping!")
     }

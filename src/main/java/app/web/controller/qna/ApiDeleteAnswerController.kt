@@ -1,14 +1,15 @@
 package app.web.controller.qna
 
 import app.dao.AnswerDao
+import app.model.Result
+import core.mvc.AbstractController
+import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import app.model.Result
-import core.mvc.*
 
-class DeleteAnswerController : AbstractController() {
+class ApiDeleteAnswerController : AbstractController() {
 
-    private val answerDao = AnswerDao()
+    private val answerDao = AnswerDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val answerId = req.getParameter("answerId")

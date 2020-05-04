@@ -61,4 +61,11 @@ class UserDao {
         }
     }
 
+    companion object {
+        private val USER_DAO =  UserDao()
+
+        fun getInstance(): UserDao {
+            return USER_DAO
+        }
+    }
 }

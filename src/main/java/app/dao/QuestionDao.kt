@@ -37,6 +37,20 @@ class QuestionDao {
         }
     }
 
+    fun findAll(): List<Question> {
+        val sql = "SELECT questionId, writer, title, contents, countOfAnswer, createdDate " +
+                "FROM QUESTIONS"
+        return jdbcTemplate.query(sql) {
+            Question(
+                    it.getLong("questionId"),
+                    it.getString("writer"),
+                    it.getString("title"),
+                    it.getString("contents"),
+                    it.getInt("countOfAnswer"),
+                    it.getTimestamp("createdDate").toLocalDateTime())
+        }
+    }
+
     fun update(question: Question) {
         val sql = "UPDATE QUESTIONS " +
                 "SET writer = ?, title = ?, contents= ?, countOfAnswer = ? " +
@@ -50,17 +64,24 @@ class QuestionDao {
 
     }
 
-    fun findAll(): List<Question> {
-        val sql = "SELECT questionId, writer, title, contents, countOfAnswer, createdDate " +
-                "FROM QUESTIONS"
-        return jdbcTemplate.query(sql) {
-            Question(
-                    it.getLong("questionId"),
-                    it.getString("writer"),
-                    it.getString("title"),
-                    it.getString("contents"),
-                    it.getInt("countOfAnswer"),
-                    it.getTimestamp("createdDate").toLocalDateTime())
+    fun incrementCountOfAnswer(questionId: Long) {
+        val sql = "UPDATE QUESTIONS " +
+                "SET countOfAnswer = countOfAnswer + 1 " +
+                "WHERE questionId = ?"
+        jdbcTemplate.update(sql, questionId)
+
+    }
+
+    fun delete(questionId: Long) {
+        val sql = "DELETE FROM QUESTIONS WHERE questionId = ?"
+        jdbcTemplate.update(sql, questionId)
+    }
+
+    companion object {
+        private val QUESTION_DAO =  QuestionDao()
+
+        fun getInstance(): QuestionDao {
+            return QUESTION_DAO
         }
     }
 

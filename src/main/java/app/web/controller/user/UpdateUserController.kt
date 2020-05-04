@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse
 
 class UpdateUserController : AbstractController() {
 
-    private val userDao = UserDao()
+    private val userDao = UserDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val user = userDao.findByUserId(req.getParameter("userId"))
