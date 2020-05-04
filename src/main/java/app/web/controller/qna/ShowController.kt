@@ -7,10 +7,12 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class ShowController: AbstractController() {
+
+    private val questionDao = QuestionDao()
+    private val answerDao = AnswerDao()
+
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val questionId = req.getParameter("questionId").toLong()
-        val questionDao = QuestionDao()
-        val answerDao = AnswerDao()
 
         val findById = questionDao.findById(questionId)
         val attributeValue = answerDao.findAllByQuestionId(questionId)

@@ -7,9 +7,11 @@ import app.model.Result
 import core.mvc.*
 
 class DeleteAnswerController : AbstractController() {
+
+    private val answerDao = AnswerDao()
+
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val answerId = req.getParameter("answerId")
-        val answerDao = AnswerDao()
 
         answerDao.delete(answerId)
 

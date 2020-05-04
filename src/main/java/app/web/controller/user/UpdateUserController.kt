@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse
 
 class UpdateUserController : AbstractController() {
 
+    private val userDao = UserDao()
+
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
-        val userDao = UserDao()
         val user = userDao.findByUserId(req.getParameter("userId"))
         check(UserSessionUtils.isSameUser(req.session, user)) { "다른 사용자의 정보를 수정할 수 없습니다." }
 

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class CreateUserController: AbstractController() {
+
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
 
         val user = User(req.getParameter("userId"),

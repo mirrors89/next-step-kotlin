@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class UpdateFormUserController : AbstractController() {
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
 
-        val userDao = UserDao()
+    private val userDao = UserDao()
+
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val userId = req.getParameter("userId")
         val user = userDao.findByUserId(userId)
 

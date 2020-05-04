@@ -16,12 +16,15 @@ data class Question(var questionId: Long,
                 @JsonSerialize(using = LocalDateTimeSerializer::class)
                var createdDate: LocalDateTime = LocalDateTime.now()) {
 
+    constructor(writer: String, title: String, contents: String): this(0, writer, title, contents)
+
     fun update(question: Question) {
         this.writer = question.writer
         this.title = question.title
         this.contents = question.contents
         this.countOfAnswer = question.countOfAnswer
     }
+
     fun getCreatedDate(): String = createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class ListUserController: AbstractController() {
+
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         if(!UserSessionUtils.isLogined(req.session)) {
             return jspView("redirect:/users/loginForm")

@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class LoginController : AbstractController() {
-    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
 
-        val userDao = UserDao()
+    private val userDao = UserDao()
+
+    override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val user = userDao.findByUserId(req.getParameter("userId")) ?: return jspView("/user/login_failed.jsp")
 
         if (user.isLogin(req.getParameter("password"))) {

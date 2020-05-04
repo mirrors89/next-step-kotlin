@@ -1,9 +1,7 @@
 package core.mvc
 
 import app.web.controller.*
-import app.web.controller.qna.AddAnswerController
-import app.web.controller.qna.DeleteAnswerController
-import app.web.controller.qna.ShowController
+import app.web.controller.qna.*
 import app.web.controller.user.*
 import org.slf4j.LoggerFactory
 
@@ -26,6 +24,9 @@ class RequestMapping {
         mapping["/user/update"] = UpdateUserController()
 
         mapping["/qna/show"] = ShowController()
+        mapping["/qna/form"] = FormController()
+        mapping["/qna/create"] = CreateQnaController()
+
         mapping["/api/qna/addAnswer"] = AddAnswerController()
         mapping["/api/qna/deleteAnswer"] = DeleteAnswerController()
 

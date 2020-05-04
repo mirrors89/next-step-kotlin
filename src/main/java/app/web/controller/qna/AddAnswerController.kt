@@ -4,12 +4,10 @@ import app.dao.AnswerDao
 import app.model.Answer
 import core.mvc.AbstractController
 import core.mvc.ModelAndView
-import core.mvc.View
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class AddAnswerController : AbstractController() {
-
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val answer = Answer( req.getParameter("questionId").toLong(),
