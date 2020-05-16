@@ -5,7 +5,7 @@ import core.mvc.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class HomeController : AbstractController() {
+class HomeLegacyController : AbstractLegacyController() {
 
     private val questionDao = QuestionDao()
 

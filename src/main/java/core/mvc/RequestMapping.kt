@@ -9,36 +9,36 @@ class RequestMapping {
     companion object {
         private val logger = LoggerFactory.getLogger(RequestMapping::class.java)
     }
-    private val mapping: HashMap<String, Controller> = hashMapOf()
+    private val mapping: HashMap<String, LegacyController> = hashMapOf()
 
     fun initMapping() {
-        mapping["/"] = HomeController()
-        mapping["/users/form"] = ForwardController("/user/form.jsp")
-        mapping["/user/loginForm"] = ForwardController("/user/login.jsp")
-        mapping["/users"] = ListUserController()
-        mapping["/user/login"] = LoginController()
-        mapping["/user/profile"] = ProfileController()
-        mapping["/user/logout"] = LogoutController()
-        mapping["/user/create"] = CreateUserController()
-        mapping["/user/updateForm"] = UpdateFormUserController()
-        mapping["/user/update"] = UpdateUserController()
+        mapping["/"] = HomeLegacyController()
+        mapping["/users/form"] = ForwardLegacyController("/user/form.jsp")
+        mapping["/user/loginForm"] = ForwardLegacyController("/user/login.jsp")
+        mapping["/users"] = ListUserLegacyController()
+        mapping["/user/login"] = LoginLegacyController()
+        mapping["/user/profile"] = ProfileLegacyController()
+        mapping["/user/logout"] = LogoutLegacyController()
+        mapping["/user/create"] = CreateUserLegacyController()
+        mapping["/user/updateForm"] = UpdateFormUserLegacyController()
+        mapping["/user/update"] = UpdateUserLegacyController()
 
-        mapping["/qna/show"] = ShowController()
-        mapping["/qna/form"] = FormController()
-        mapping["/qna/create"] = CreateQuestionController()
-        mapping["/qna/updateForm"] = UpdateFormController()
-        mapping["/qna/update"] = UpdateQuestionController()
-        mapping["/qna/delete"] = DeleteQuestionController()
+        mapping["/qna/show"] = ShowLegacyController()
+        mapping["/qna/form"] = FormLegacyController()
+        mapping["/qna/create"] = CreateQuestionLegacyController()
+        mapping["/qna/updateForm"] = UpdateFormLegacyController()
+        mapping["/qna/update"] = UpdateQuestionLegacyController()
+        mapping["/qna/delete"] = DeleteQuestionLegacyController()
 
-        mapping["/api/qna/list"] = ApiListAnswerController()
-        mapping["/api/qna/delete"] = ApiDeleteQuestionController()
-        mapping["/api/qna/addAnswer"] = AddAnswerController()
-        mapping["/api/qna/deleteAnswer"] = ApiDeleteAnswerController()
+        mapping["/api/qna/list"] = ApiListAnswerLegacyController()
+        mapping["/api/qna/delete"] = ApiDeleteQuestionLegacyController()
+        mapping["/api/qna/addAnswer"] = AddAnswerLegacyController()
+        mapping["/api/qna/deleteAnswer"] = ApiDeleteAnswerLegacyController()
 
         logger.info("Initialized Request Mapping!")
     }
 
-    fun findController(requestUri: String): Controller? {
+    fun findController(requestUri: String): LegacyController? {
         return mapping[requestUri]
     }
 }

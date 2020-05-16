@@ -3,13 +3,12 @@ package app.web.controller.qna
 import app.dao.AnswerDao
 import app.dao.QuestionDao
 import app.model.Answer
-import app.service.QnaService
-import core.mvc.AbstractController
+import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class AddAnswerController : AbstractController() {
+class AddAnswerLegacyController : AbstractLegacyController() {
 
     private val questionDao = QuestionDao.getInstance()
     private val answerDao = AnswerDao.getInstance()

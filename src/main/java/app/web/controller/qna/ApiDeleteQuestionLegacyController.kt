@@ -2,12 +2,12 @@ package app.web.controller.qna
 
 import app.service.QnaService
 import app.web.controller.UserSessionUtils
-import core.mvc.AbstractController
+import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class DeleteQuestionController: AbstractController() {
+class ApiDeleteQuestionLegacyController: AbstractLegacyController() {
 
     private val qnaService = QnaService.getInstance()
 
@@ -18,6 +18,7 @@ class DeleteQuestionController: AbstractController() {
 
         val questionId = req.getParameter("questionId").toLong()
         qnaService.deleteQuestion(questionId, UserSessionUtils.getUserFromSession(req.session))
+
         return jspView("redirect:/")
 
     }

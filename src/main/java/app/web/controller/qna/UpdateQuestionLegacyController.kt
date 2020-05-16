@@ -3,12 +3,12 @@ package app.web.controller.qna
 import app.dao.QuestionDao
 import app.model.Question
 import app.web.controller.UserSessionUtils
-import core.mvc.AbstractController
+import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class UpdateFormController: AbstractController() {
+class UpdateQuestionLegacyController: AbstractLegacyController() {
 
     private val questionDao = QuestionDao.getInstance()
 
@@ -23,8 +23,13 @@ class UpdateFormController: AbstractController() {
             throw IllegalStateException("다른 사용자가 쓴 글을 수정할 수 없습니다.")
         }
 
-        return jspView("/qna/update.jsp")
-                .addObject("question", question)
+        val title = req.getParameter("title")
+        val contents = req.getParameter("contents")
+
+        question.update(Question(question.writer, title, contents))
+        questionDao.update(question)
+
+        return jspView("redirect:/")
 
     }
 }

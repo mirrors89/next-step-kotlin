@@ -2,12 +2,12 @@ package app.web.controller.qna
 
 import app.dao.AnswerDao
 import app.model.Result
-import core.mvc.AbstractController
+import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ApiDeleteAnswerController : AbstractController() {
+class ApiDeleteAnswerLegacyController : AbstractLegacyController() {
 
     private val answerDao = AnswerDao.getInstance()
 

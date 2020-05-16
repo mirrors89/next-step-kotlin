@@ -1,6 +1,6 @@
 package core.mvc
 
-abstract class AbstractController: Controller {
+abstract class AbstractLegacyController: LegacyController {
     protected fun jspView(forwardUrl: String): ModelAndView {
         return ModelAndView(JspView(forwardUrl))
     }

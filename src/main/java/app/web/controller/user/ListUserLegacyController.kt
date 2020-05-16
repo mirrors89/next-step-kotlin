@@ -2,12 +2,11 @@ package app.web.controller.user
 
 import app.dao.UserDao
 import app.web.controller.UserSessionUtils
-import core.db.DataBase
 import core.mvc.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ListUserController: AbstractController() {
+class ListUserLegacyController: AbstractLegacyController() {
 
     private val userDao = UserDao.getInstance()
 

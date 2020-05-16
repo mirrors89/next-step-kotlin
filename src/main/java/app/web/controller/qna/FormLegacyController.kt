@@ -1,12 +1,12 @@
 package app.web.controller.qna
 
 import app.web.controller.UserSessionUtils
-import core.mvc.AbstractController
+import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class FormController : AbstractController() {
+class FormLegacyController : AbstractLegacyController() {
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val session = req.session

@@ -3,26 +3,25 @@ package app.web.controller.user
 import app.dao.UserDao
 import core.db.DataBase
 import app.model.User
+import app.web.controller.UserSessionUtils
 import core.mvc.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class CreateUserController: AbstractController() {
+class UpdateUserLegacyController : AbstractLegacyController() {
 
     private val userDao = UserDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
+        val user = userDao.findByUserId(req.getParameter("userId"))
+        check(UserSessionUtils.isSameUser(req.session, user)) { "다른 사용자의 정보를 수정할 수 없습니다." }
 
-        val user = User(req.getParameter("userId"),
+        val updateUser = User(req.getParameter("userId"),
                 req.getParameter("password"),
                 req.getParameter("name"),
                 req.getParameter("email"))
 
-
-        userDao.insert(user)
-
-        val session = req.session
-        session.setAttribute("user", user)
+        DataBase.addUser(updateUser)
         return jspView("redirect:/users")
     }
 }

@@ -6,7 +6,7 @@ import core.mvc.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ShowController: AbstractController() {
+class ShowLegacyController: AbstractLegacyController() {
 
     private val questionDao = QuestionDao.getInstance()
     private val answerDao = AnswerDao.getInstance()

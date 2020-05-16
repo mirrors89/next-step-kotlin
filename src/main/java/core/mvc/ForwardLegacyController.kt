@@ -4,7 +4,7 @@ import java.lang.NullPointerException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ForwardController(private val forwardUrl: String) : AbstractController() {
+class ForwardLegacyController(private val forwardUrl: String) : AbstractLegacyController() {
 
     init {
         if(forwardUrl.isEmpty()) {

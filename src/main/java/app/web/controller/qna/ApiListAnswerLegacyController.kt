@@ -1,12 +1,12 @@
 package app.web.controller.qna
 
 import app.dao.QuestionDao
-import core.mvc.AbstractController
+import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ApiListAnswerController: AbstractController() {
+class ApiListAnswerLegacyController: AbstractLegacyController() {
 
     private val questionDao = QuestionDao.getInstance()
 
