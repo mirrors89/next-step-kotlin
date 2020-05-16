@@ -8,7 +8,7 @@ import java.lang.reflect.Method
 import javax.servlet.http.HttpServletRequest
 
 class AnnotationHandlerMapping(private vararg val basePackage: Any,
-                               private val handlerExecutions: HashMap<HandleKey, HandlerExecution> = hashMapOf()) {
+                               private val handlerExecutions: HashMap<HandleKey, HandlerExecution> = hashMapOf()): HandlerMapping {
 
     fun initialize() {
         val controllerScanner  = ControllerScanner(*basePackage)
@@ -24,7 +24,7 @@ class AnnotationHandlerMapping(private vararg val basePackage: Any,
         }
     }
 
-    fun getHandler(request: HttpServletRequest): HandlerExecution {
+    override fun getHandler(request: HttpServletRequest): HandlerExecution {
         val requestUri = request.requestURI
         val rm = RequestMethod.valueOf(request.method.toUpperCase())
 

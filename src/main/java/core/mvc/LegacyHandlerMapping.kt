@@ -3,25 +3,18 @@ package core.mvc
 import app.web.controller.*
 import app.web.controller.qna.*
 import app.web.controller.user.*
+import core.nmvc.HandlerMapping
 import org.slf4j.LoggerFactory
+import javax.servlet.http.HttpServletRequest
 
-class RequestMapping {
+class LegacyHandlerMapping: HandlerMapping {
     companion object {
-        private val logger = LoggerFactory.getLogger(RequestMapping::class.java)
+        private val logger = LoggerFactory.getLogger(LegacyHandlerMapping::class.java)
     }
     private val mapping: HashMap<String, LegacyController> = hashMapOf()
 
     fun initMapping() {
         mapping["/"] = HomeLegacyController()
-        mapping["/users/form"] = ForwardLegacyController("/user/form.jsp")
-        mapping["/user/loginForm"] = ForwardLegacyController("/user/login.jsp")
-        mapping["/users"] = ListUserLegacyController()
-        mapping["/user/login"] = LoginLegacyController()
-        mapping["/user/profile"] = ProfileLegacyController()
-        mapping["/user/logout"] = LogoutLegacyController()
-        mapping["/user/create"] = CreateUserLegacyController()
-        mapping["/user/updateForm"] = UpdateFormUserLegacyController()
-        mapping["/user/update"] = UpdateUserLegacyController()
 
         mapping["/qna/show"] = ShowLegacyController()
         mapping["/qna/form"] = FormLegacyController()
@@ -38,7 +31,7 @@ class RequestMapping {
         logger.info("Initialized Request Mapping!")
     }
 
-    fun findController(requestUri: String): LegacyController? {
-        return mapping[requestUri]
+    override fun getHandler(request: HttpServletRequest): LegacyController? {
+        return mapping[request.requestURI]
     }
 }
