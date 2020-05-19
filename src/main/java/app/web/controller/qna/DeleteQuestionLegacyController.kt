@@ -1,7 +1,5 @@
 package app.web.controller.qna
 
-import app.dao.impl.JdbcAnswerDao
-import app.dao.impl.JdbcQuestionDao
 import app.service.QnaService
 import app.web.controller.UserSessionUtils
 import core.mvc.AbstractLegacyController
@@ -9,9 +7,7 @@ import core.mvc.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class DeleteQuestionLegacyController: AbstractLegacyController() {
-
-    private val qnaService = QnaService.getInstance(JdbcQuestionDao.getInstance(), JdbcAnswerDao.getInstance())
+class DeleteQuestionLegacyController(private val qnaService: QnaService): AbstractLegacyController() {
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         check(UserSessionUtils.isLogined(req.session)) {

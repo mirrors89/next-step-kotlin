@@ -77,13 +77,4 @@ class JdbcQuestionDao : QuestionDao {
         val sql = "DELETE FROM QUESTIONS WHERE questionId = ?"
         jdbcTemplate.update(sql, questionId)
     }
-
-    companion object {
-        private val QUESTION_DAO = JdbcQuestionDao()
-
-        fun getInstance(): JdbcQuestionDao {
-            return QUESTION_DAO
-        }
-    }
-
 }
