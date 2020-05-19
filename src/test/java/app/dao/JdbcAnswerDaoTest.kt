@@ -1,5 +1,6 @@
 package app.dao
 
+import app.dao.impl.JdbcAnswerDao
 import app.model.Answer
 import core.jdbc.ConnectionManager
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -9,16 +10,16 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator
 
-internal class AnswerDaoTest {
+internal class JdbcAnswerDaoTest {
 
-    private lateinit var answerDao: AnswerDao
+    private lateinit var answerDao: JdbcAnswerDao
 
     @BeforeEach
     fun setup() {
         val populator = ResourceDatabasePopulator()
         populator.addScript(ClassPathResource("jwp.sql"))
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource())
-        answerDao = AnswerDao()
+        answerDao = JdbcAnswerDao()
     }
 
     @Test

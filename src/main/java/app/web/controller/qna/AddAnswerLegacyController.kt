@@ -1,7 +1,7 @@
 package app.web.controller.qna
 
-import app.dao.AnswerDao
-import app.dao.QuestionDao
+import app.dao.impl.JdbcAnswerDao
+import app.dao.impl.JdbcQuestionDao
 import app.model.Answer
 import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse
 
 class AddAnswerLegacyController : AbstractLegacyController() {
 
-    private val questionDao = QuestionDao.getInstance()
-    private val answerDao = AnswerDao.getInstance()
+    private val questionDao = JdbcQuestionDao.getInstance()
+    private val answerDao = JdbcAnswerDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         val questionId = req.getParameter("questionId").toLong()
