@@ -10,9 +10,13 @@ import app.model.User
 
 
 class QnaService private constructor() {
-    private val questionDao = QuestionDao.getInstance()
-    private val answerDao = AnswerDao.getInstance()
+    private lateinit var questionDao: QuestionDao
+    private lateinit var answerDao: AnswerDao
 
+    constructor(questionDao: QuestionDao, answerDao: AnswerDao): this() {
+        this.questionDao = questionDao
+        this.answerDao = answerDao
+    }
 
     fun findById(questionId: Long): Question? {
         return questionDao.findById(questionId)
@@ -46,10 +50,13 @@ class QnaService private constructor() {
     }
 
     companion object {
-        private var QNA_SERVICE = QnaService()
+        private var QNA_SERVICE: QnaService? = null
 
-        fun getInstance(): QnaService {
-            return QNA_SERVICE
+        fun getInstance(questionDao: QuestionDao, answerDao: AnswerDao): QnaService {
+            if(QNA_SERVICE == null) {
+                QNA_SERVICE = QnaService(questionDao, answerDao)
+            }
+            return QNA_SERVICE!!
         }
     }
 }
