@@ -23,7 +23,7 @@ internal class QnaServiceTest {
     fun setup() {
         questionDao = MockQuestionDao()
         answerDao = MockAnswerDao()
-        qnaService = QnaService.getInstance(questionDao, answerDao)
+        qnaService = QnaService(questionDao, answerDao)
     }
 
     @Test

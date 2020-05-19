@@ -50,15 +50,4 @@ class QnaService private constructor() {
 
         questionDao.delete(questionId)
     }
-
-    companion object {
-        private var QNA_SERVICE: QnaService? = null
-
-        fun getInstance(questionDao: QuestionDao, answerDao: AnswerDao): QnaService {
-            if(QNA_SERVICE == null) {
-                QNA_SERVICE = QnaService(questionDao, answerDao)
-            }
-            return QNA_SERVICE!!
-        }
-    }
 }
