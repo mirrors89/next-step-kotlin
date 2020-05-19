@@ -1,6 +1,6 @@
 package app.web.controller.qna
 
-import app.dao.QuestionDao
+import app.dao.impl.JdbcQuestionDao
 import app.web.controller.UserSessionUtils
 import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse
 
 class UpdateFormLegacyController: AbstractLegacyController() {
 
-    private val questionDao = QuestionDao.getInstance()
+    private val questionDao = JdbcQuestionDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
         check(UserSessionUtils.isLogined(req.session)) {

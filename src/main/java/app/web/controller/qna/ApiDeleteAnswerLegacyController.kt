@@ -1,6 +1,6 @@
 package app.web.controller.qna
 
-import app.dao.AnswerDao
+import app.dao.impl.JdbcAnswerDao
 import app.model.Result
 import core.mvc.AbstractLegacyController
 import core.mvc.ModelAndView
@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse
 
 class ApiDeleteAnswerLegacyController : AbstractLegacyController() {
 
-    private val answerDao = AnswerDao.getInstance()
+    private val answerDao = JdbcAnswerDao.getInstance()
 
     override fun execute(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
-        val answerId = req.getParameter("answerId")
+        val answerId = req.getParameter("answerId") as Long
 
         answerDao.delete(answerId)
 
