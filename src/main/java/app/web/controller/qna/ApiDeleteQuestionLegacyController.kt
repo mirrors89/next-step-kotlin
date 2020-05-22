@@ -15,7 +15,7 @@ class ApiDeleteQuestionLegacyController(private val qnaService: QnaService) : Ab
         }
 
         val questionId = req.getParameter("questionId").toLong()
-        qnaService.deleteQuestion(questionId, UserSessionUtils.getUserFromSession(req.session))
+        qnaService.deleteQuestion(questionId, UserSessionUtils.getUserFromSession(req.session)!!)
 
         return jspView("redirect:/")
 

@@ -32,8 +32,8 @@
                     <div class="article-doc">
                         ${question.contents}
                     </div>
-                    <div class="article-util">
-                        <ul class="article-util-list">
+                    <div class="article-core.util">
+                        <ul class="article-core.util-list">
                             <li>
                                 <a class="link-modify-article" href="/qna/updateForm?questionId=${question.questionId}">수정</a>
                             </li>
@@ -70,8 +70,8 @@
                                     <div class="article-doc comment-doc">
                                         <p>${each.contents}</p>
                                     </div>
-                                    <div class="article-util">
-                                        <ul class="article-util-list">
+                                    <div class="article-core.util">
+                                        <ul class="article-core.util-list">
                                             <li>
                                                 <a class="link-modify-article" href="/api/qna/updateAnswer?answerId=${each.answerId}">수정</a>
                                             </li>
@@ -120,8 +120,8 @@
         <div class="article-doc comment-doc">
             {2}
         </div>
-        <div class="article-util">
-            <ul class="article-util-list">
+        <div class="article-core.util">
+            <ul class="article-core.util-list">
                 <li>
                     <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
                 </li>

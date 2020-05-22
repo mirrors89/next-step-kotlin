@@ -20,4 +20,9 @@ data class Answer(var answerId: Long? = null,
 
     fun getCreatedDate(): String = createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
+    fun canDelete(user: User): Boolean {
+        return user.isSameUser(this.writer)
+
+    }
+
 }
