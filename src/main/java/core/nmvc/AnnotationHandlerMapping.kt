@@ -2,6 +2,7 @@ package core.nmvc
 
 import core.annotation.RequestMapping
 import core.annotation.RequestMethod
+import core.di.factory.BeanFactory
 import org.reflections.ReflectionUtils
 import org.slf4j.LoggerFactory
 import java.lang.reflect.Method
@@ -11,9 +12,10 @@ class AnnotationHandlerMapping(private vararg val basePackage: Any,
                                private val handlerExecutions: HashMap<HandleKey, HandlerExecution> = hashMapOf()): HandlerMapping {
 
     fun initialize() {
-        val controllerScanner  = ControllerScanner(*basePackage)
-
-        val controllers = controllerScanner.getControllers()
+        val beanScanner = BeanScanner(basePackage)
+        val beanFactory = BeanFactory(beanScanner.scan())
+        beanFactory.initialize()
+        val controllers = beanFactory.getControllers()
         val methods: Set<Method> = getRequestMappingMethods(controllers.keys)
 
         for(method in methods) {
